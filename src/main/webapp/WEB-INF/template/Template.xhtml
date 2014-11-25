@@ -65,7 +65,15 @@
                                 <h:commandLink action="#{sessionBean.go(&quot;inicio&quot;)}" class="navbar-text" value="#{label['inicio']}" rendered="#{sessionBean.isNotActive(&quot;inicio&quot;)}"/>
                             </li>
 
-                            
+                            <c:if test="#{sessionBean.perfilViewMatch(&quot;atributosbonos&quot;)}">
+                                <li >
+                                    <h:commandLink  action="#{sessionBean.go(&quot;atributosbonos&quot;)}" class="navbar-text-selected" value="#{label['atributosbono']}" rendered="#{sessionBean.isActive(&quot;atributosbonos&quot;)}"/>
+                                    <h:commandLink  action="#{sessionBean.go(&quot;atributosbonos&quot;)}" class="navbar-text" value="#{label['atributosbono']}" rendered="#{sessionBean.isNotActive(&quot;atributosbonos&quot;)}"/>
+
+                                </li>
+                            </c:if>
+
+
                             <c:if test="#{sessionBean.isActive(&quot;cuenta&quot;)}">
                                 <li>
                                     <h:commandLink  action="#{sessionBean.go(&quot;cuenta&quot;)}" class="navbar-text-selected" value="#{label['cuentausuarios']}"/>
@@ -76,7 +84,7 @@
                                     <h:commandLink  action="#{sessionBean.go(&quot;cuenta&quot;)}" class="navbar-text" value="#{label['cuentausuarios']}"/>
                                 </li>
                             </c:if>
-                            
+
                         </ul>
                     </div><!-- /.navbar-collapse -->
                 </div><!-- /.container-fluid -->

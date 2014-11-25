@@ -11,7 +11,9 @@ import com.invbf.sistemagestionbonos.entitySGC.Vistas;
 import com.invbf.sistemagestionbonos.exceptions.ClavesNoConcuerdanException;
 import com.invbf.sistemagestionbonos.exceptions.UsuarioNoConectadoException;
 import com.invbf.sistemagestionbonos.exceptions.UsuarioNoExisteException;
+import com.invbf.sistemagestionbonos.facade.AdminFacade;
 import com.invbf.sistemagestionbonos.facade.SystemFacade;
+import com.invbf.sistemagestionbonos.facade.impl.AdminFacadeImpl;
 import com.invbf.sistemagestionbonos.facade.impl.SystemFacadeImpl;
 import com.invbf.sistemagestionbonos.observer.Observer;
 import com.invbf.sistemagestionbonos.observer.Subject;
@@ -36,6 +38,7 @@ import javax.faces.context.FacesContext;
 public class SessionBean implements Serializable, Subject {
 
     SystemFacade sessionFacade;
+    AdminFacade adminFacade;
     private Usuarios usuario;//Almacena el objeto usuario de la session
     private HashMap<String, Object> Attributes;
     private List<Observer> observers;
@@ -51,6 +54,7 @@ public class SessionBean implements Serializable, Subject {
     @PostConstruct
     public void init() {
         sessionFacade = new SystemFacadeImpl();
+        adminFacade = new AdminFacadeImpl();
         usuario = new Usuarios();
         Attributes = new HashMap<String, Object>();
         observers = new ArrayList<Observer>();
@@ -73,7 +77,7 @@ public class SessionBean implements Serializable, Subject {
     public String Conectar() {
         try {
             usuario = sessionFacade.iniciarSession(usuario);
-            sessionFacade.registrarlog("Inicio de sesion del usuario "+usuario.getNombreUsuario());
+            sessionFacade.registrarlog("Inicio de sesion del usuario " + usuario.getNombreUsuario());
             active = "inicio";
             return "/pages/index.xhtml";
         } catch (ClavesNoConcuerdanException ex) {
@@ -212,13 +216,17 @@ public class SessionBean implements Serializable, Subject {
     }
 
     public String go(String page) {
+
         if (page.equals("inicio")) {
             active = "inicio";
             return "/pages/index.xhtml";
         } else if (page.equals("cuenta")) {
             active = "cuenta";
             return "/pages/CuentaUsuarios.xhtml";
-        }  
+        } else if (page.equals("atributosbonos")) {
+            active = "atributosbonos";
+            return "/pages/AtributosBonos.xhtml";
+        }
         return "/pages/InicioSession.xhtml";
     }
 
@@ -232,6 +240,14 @@ public class SessionBean implements Serializable, Subject {
 
     public void setSessionFacade(SystemFacade sessionFacade) {
         this.sessionFacade = sessionFacade;
+    }
+
+    public AdminFacade getAdminFacade() {
+        return adminFacade;
+    }
+
+    public void setAdminFacade(AdminFacade adminFacade) {
+        this.adminFacade = adminFacade;
     }
 
 }

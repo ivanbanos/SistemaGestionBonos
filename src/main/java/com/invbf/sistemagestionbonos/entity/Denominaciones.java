@@ -34,6 +34,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Denominaciones.findById", query = "SELECT d FROM Denominaciones d WHERE d.id = :id"),
     @NamedQuery(name = "Denominaciones.findByValor", query = "SELECT d FROM Denominaciones d WHERE d.valor = :valor")})
 public class Denominaciones implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "denominacionesid")
+    private List<Solicitudentregalotes> solicitudentregalotesList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -118,6 +120,15 @@ public class Denominaciones implements Serializable {
     @Override
     public String toString() {
         return "com.invbf.sistemagestionbonos.entity.Denominaciones[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    public List<Solicitudentregalotes> getSolicitudentregalotesList() {
+        return solicitudentregalotesList;
+    }
+
+    public void setSolicitudentregalotesList(List<Solicitudentregalotes> solicitudentregalotesList) {
+        this.solicitudentregalotesList = solicitudentregalotesList;
     }
     
 }
