@@ -5,10 +5,12 @@
  */
 package com.invbf.sistemagestionbonos.facade.impl;
 
+import com.invbf.sistemagestionbonos.dao.CasinoDao;
 import com.invbf.sistemagestionbonos.dao.DenominacionDao;
 import com.invbf.sistemagestionbonos.dao.TipoBonoDao;
 import com.invbf.sistemagestionbonos.entity.Denominaciones;
 import com.invbf.sistemagestionbonos.entity.Tiposbonos;
+import com.invbf.sistemagestionbonos.entitySGC.Casinos;
 import com.invbf.sistemagestionbonos.facade.AdminFacade;
 import java.util.List;
 
@@ -60,6 +62,11 @@ public class AdminFacadeImpl implements AdminFacade{
             TipoBonoDao.edit(elemento);
             return true;
         }
+    }
+
+    @Override
+    public List<Casinos> findAllCasinos() {
+        return CasinoDao.findAll();
     }
     
 }

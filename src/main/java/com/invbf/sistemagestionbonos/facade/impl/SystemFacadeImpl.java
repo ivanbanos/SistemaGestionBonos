@@ -17,6 +17,13 @@ import com.invbf.sistemagestionbonos.exceptions.UsuarioNoExisteException;
 import com.invbf.sistemagestionbonos.facade.SystemFacade;
 import com.invbf.sistemagestionbonos.util.EncryptUtil;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -70,9 +77,20 @@ public class SystemFacadeImpl implements SystemFacade {
 
     @Override
     public void registrarlog(String mensaje) {
-        Logs log = new Logs();
-        log.setMensaje(mensaje);
-        LogDao.create(log);
+        try {
+            Logs log = new Logs();
+            log.setMensaje(mensaje);
+            DateFormat df = new SimpleDateFormat("dd/MMMM/yyyy HH:mm:ss");
+            DateFormat df2 = new SimpleDateFormat("dd/MMMM/yyyy HH:mm:ss");
+            TimeZone timeZone = TimeZone.getTimeZone("GMT-5");
+            df.setTimeZone(timeZone);
+            Calendar nowDate = Calendar.getInstance();
+            nowDate.setTime(df2.parse(df.format(nowDate.getTime())));
+            log.setFecha(nowDate.getTime());
+            LogDao.create(log);
+        } catch (ParseException ex) {
+            Logger.getLogger(SystemFacadeImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

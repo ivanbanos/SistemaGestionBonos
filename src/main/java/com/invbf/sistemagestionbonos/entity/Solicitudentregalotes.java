@@ -9,12 +9,15 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -31,12 +34,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Solicitudentregalotes.findById", query = "SELECT s FROM Solicitudentregalotes s WHERE s.id = :id"),
     @NamedQuery(name = "Solicitudentregalotes.findByDesde", query = "SELECT s FROM Solicitudentregalotes s WHERE s.desde = :desde"),
     @NamedQuery(name = "Solicitudentregalotes.findByHasta", query = "SELECT s FROM Solicitudentregalotes s WHERE s.hasta = :hasta"),
-    @NamedQuery(name = "Solicitudentregalotes.findByEstado", query = "SELECT s FROM Solicitudentregalotes s WHERE s.estado = :estado"),
-    @NamedQuery(name = "Solicitudentregalotes.findByObservacion", query = "SELECT s FROM Solicitudentregalotes s WHERE s.observacion = :observacion"),
     @NamedQuery(name = "Solicitudentregalotes.findByIdCasino", query = "SELECT s FROM Solicitudentregalotes s WHERE s.idCasino = :idCasino")})
 public class Solicitudentregalotes implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @NotNull
     @Column(name = "id")
@@ -47,22 +49,19 @@ public class Solicitudentregalotes implements Serializable {
     @Size(max = 45)
     @Column(name = "hasta")
     private String hasta;
-    @Size(max = 45)
-    @Column(name = "estado")
-    private String estado;
-    @Size(max = 45)
-    @Column(name = "observacion")
-    private String observacion;
     @Basic(optional = false)
     @NotNull
     @Column(name = "idCasino")
     private int idCasino;
-    @JoinColumn(name = "Denominacionesid", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Denominaciones denominacionesid;
     @JoinColumn(name = "TiposBonosid", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Tiposbonos tiposBonosid;
+    @JoinColumn(name = "Denominacionesid", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Denominaciones denominacionesid;
+    @JoinColumn(name = "SolicitudEntregaLotesMaestro", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Solicitudentregalotesmaestro solicitudEntregaLotesMaestro;
 
     public Solicitudentregalotes() {
     }
@@ -100,28 +99,20 @@ public class Solicitudentregalotes implements Serializable {
         this.hasta = hasta;
     }
 
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public String getObservacion() {
-        return observacion;
-    }
-
-    public void setObservacion(String observacion) {
-        this.observacion = observacion;
-    }
-
     public int getIdCasino() {
         return idCasino;
     }
 
     public void setIdCasino(int idCasino) {
         this.idCasino = idCasino;
+    }
+
+    public Tiposbonos getTiposBonosid() {
+        return tiposBonosid;
+    }
+
+    public void setTiposBonosid(Tiposbonos tiposBonosid) {
+        this.tiposBonosid = tiposBonosid;
     }
 
     public Denominaciones getDenominacionesid() {
@@ -132,12 +123,12 @@ public class Solicitudentregalotes implements Serializable {
         this.denominacionesid = denominacionesid;
     }
 
-    public Tiposbonos getTiposBonosid() {
-        return tiposBonosid;
+    public Solicitudentregalotesmaestro getSolicitudEntregaLotesMaestro() {
+        return solicitudEntregaLotesMaestro;
     }
 
-    public void setTiposBonosid(Tiposbonos tiposBonosid) {
-        this.tiposBonosid = tiposBonosid;
+    public void setSolicitudEntregaLotesMaestro(Solicitudentregalotesmaestro solicitudEntregaLotesMaestro) {
+        this.solicitudEntregaLotesMaestro = solicitudEntregaLotesMaestro;
     }
 
     @Override

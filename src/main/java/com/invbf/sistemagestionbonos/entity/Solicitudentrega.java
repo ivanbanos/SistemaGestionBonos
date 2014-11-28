@@ -67,12 +67,12 @@ public class Solicitudentrega implements Serializable {
     private String estado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "solicitudentrega")
     private List<Solicitudentregaclientes> solicitudentregaclientesList;
-    @JoinColumn(name = "PropositoEntrega", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Propositosentrega propositoEntrega;
     @JoinColumn(name = "TipoBono", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Tiposbonos tipoBono;
+    @JoinColumn(name = "PropositoEntrega", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Propositosentrega propositoEntrega;
 
     public Solicitudentrega() {
     }
@@ -143,20 +143,20 @@ public class Solicitudentrega implements Serializable {
         this.solicitudentregaclientesList = solicitudentregaclientesList;
     }
 
-    public Propositosentrega getPropositoEntrega() {
-        return propositoEntrega;
-    }
-
-    public void setPropositoEntrega(Propositosentrega propositoEntrega) {
-        this.propositoEntrega = propositoEntrega;
-    }
-
     public Tiposbonos getTipoBono() {
         return tipoBono;
     }
 
     public void setTipoBono(Tiposbonos tipoBono) {
         this.tipoBono = tipoBono;
+    }
+
+    public Propositosentrega getPropositoEntrega() {
+        return propositoEntrega;
+    }
+
+    public void setPropositoEntrega(Propositosentrega propositoEntrega) {
+        this.propositoEntrega = propositoEntrega;
     }
 
     @Override

@@ -35,8 +35,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Tiposbonos.findById", query = "SELECT t FROM Tiposbonos t WHERE t.id = :id"),
     @NamedQuery(name = "Tiposbonos.findByNombre", query = "SELECT t FROM Tiposbonos t WHERE t.nombre = :nombre")})
 public class Tiposbonos implements Serializable {
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tiposBonosid")
-    private List<Solicitudentregalotes> solicitudentregalotesList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,6 +46,8 @@ public class Tiposbonos implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "nombre")
     private String nombre;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tiposBonosid")
+    private List<Solicitudentregalotes> solicitudentregalotesList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoBono")
     private List<Lotesbonos> lotesbonosList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoBono")
@@ -81,6 +81,15 @@ public class Tiposbonos implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    @XmlTransient
+    public List<Solicitudentregalotes> getSolicitudentregalotesList() {
+        return solicitudentregalotesList;
+    }
+
+    public void setSolicitudentregalotesList(List<Solicitudentregalotes> solicitudentregalotesList) {
+        this.solicitudentregalotesList = solicitudentregalotesList;
     }
 
     @XmlTransient
@@ -133,15 +142,6 @@ public class Tiposbonos implements Serializable {
     @Override
     public String toString() {
         return "com.invbf.sistemagestionbonos.entity.Tiposbonos[ id=" + id + " ]";
-    }
-
-    @XmlTransient
-    public List<Solicitudentregalotes> getSolicitudentregalotesList() {
-        return solicitudentregalotesList;
-    }
-
-    public void setSolicitudentregalotesList(List<Solicitudentregalotes> solicitudentregalotesList) {
-        this.solicitudentregalotesList = solicitudentregalotesList;
     }
     
 }

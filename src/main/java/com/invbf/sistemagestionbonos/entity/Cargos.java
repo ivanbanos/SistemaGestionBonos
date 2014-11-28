@@ -8,7 +8,6 @@ package com.invbf.sistemagestionbonos.entity;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -43,7 +42,7 @@ public class Cargos implements Serializable {
     @Size(max = 45)
     @Column(name = "nombre")
     private String nombre;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idcargo")
+    @OneToMany(mappedBy = "idcargo")
     private List<Usuariosdetalles> usuariosdetallesList;
 
     public Cargos() {

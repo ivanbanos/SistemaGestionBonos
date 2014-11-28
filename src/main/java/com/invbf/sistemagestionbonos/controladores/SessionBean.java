@@ -12,8 +12,10 @@ import com.invbf.sistemagestionbonos.exceptions.ClavesNoConcuerdanException;
 import com.invbf.sistemagestionbonos.exceptions.UsuarioNoConectadoException;
 import com.invbf.sistemagestionbonos.exceptions.UsuarioNoExisteException;
 import com.invbf.sistemagestionbonos.facade.AdminFacade;
+import com.invbf.sistemagestionbonos.facade.MarketingFacade;
 import com.invbf.sistemagestionbonos.facade.SystemFacade;
 import com.invbf.sistemagestionbonos.facade.impl.AdminFacadeImpl;
+import com.invbf.sistemagestionbonos.facade.impl.MarketingFacadeImpl;
 import com.invbf.sistemagestionbonos.facade.impl.SystemFacadeImpl;
 import com.invbf.sistemagestionbonos.observer.Observer;
 import com.invbf.sistemagestionbonos.observer.Subject;
@@ -39,6 +41,7 @@ public class SessionBean implements Serializable, Subject {
 
     SystemFacade sessionFacade;
     AdminFacade adminFacade;
+    MarketingFacade marketingFacade;
     private Usuarios usuario;//Almacena el objeto usuario de la session
     private HashMap<String, Object> Attributes;
     private List<Observer> observers;
@@ -55,6 +58,7 @@ public class SessionBean implements Serializable, Subject {
     public void init() {
         sessionFacade = new SystemFacadeImpl();
         adminFacade = new AdminFacadeImpl();
+        marketingFacade=new MarketingFacadeImpl();
         usuario = new Usuarios();
         Attributes = new HashMap<String, Object>();
         observers = new ArrayList<Observer>();
@@ -226,6 +230,9 @@ public class SessionBean implements Serializable, Subject {
         } else if (page.equals("atributosbonos")) {
             active = "atributosbonos";
             return "/pages/AtributosBonos.xhtml";
+        }else if (page.equals("GenerarSolicitudLotesBonos")) {
+            active = "lotesdebonos";
+            return "/pages/GeneradorSolicitudLoteBono.xhtml";
         }
         return "/pages/InicioSession.xhtml";
     }
@@ -248,6 +255,22 @@ public class SessionBean implements Serializable, Subject {
 
     public void setAdminFacade(AdminFacade adminFacade) {
         this.adminFacade = adminFacade;
+    }
+
+    public MarketingFacade getMarketingFacade() {
+        return marketingFacade;
+    }
+
+    public void setMarketingFacade(MarketingFacade marketingFacade) {
+        this.marketingFacade = marketingFacade;
+    }
+
+    public List<Observer> getObservers() {
+        return observers;
+    }
+
+    public void setObservers(List<Observer> observers) {
+        this.observers = observers;
     }
 
 }

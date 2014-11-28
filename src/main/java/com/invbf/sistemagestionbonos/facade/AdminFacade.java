@@ -7,6 +7,7 @@ package com.invbf.sistemagestionbonos.facade;
 
 import com.invbf.sistemagestionbonos.entity.Denominaciones;
 import com.invbf.sistemagestionbonos.entity.Tiposbonos;
+import com.invbf.sistemagestionbonos.entitySGC.Casinos;
 import java.util.List;
 
 /**
@@ -26,5 +27,7 @@ public interface AdminFacade {
     public List<Tiposbonos> findAllTiposbonos();
 
     public boolean guardarTiposbonos(Tiposbonos elemento);
+
+    public List<Casinos> findAllCasinos();
     
 }
