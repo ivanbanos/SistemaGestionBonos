@@ -11,8 +11,15 @@ import com.invbf.sistemagestionbonos.entity.Solicitudentregalotesmaestro;
 import com.invbf.sistemagestionbonos.entitySGC.Casinos;
 import com.invbf.sistemagestionbonos.util.FacesUtil;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -44,15 +51,15 @@ public class GeneradorSolicitudLotesBonos {
     public void init() {
         sessionBean.checkUsuarioConectado();
         sessionBean.setActive("lotesdebonos");
-        if (!sessionBean.perfilViewMatch("GenerarSolicitudLotesBonos")) {
+        if (!sessionBean.perfilFormMatch("SolicitudLotes","crear")) {
             try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("InicioSession.xhtml");
             } catch (IOException ex) {
             }
         }
-        
-            System.out.println("Buscando info de la solictud si existe");
-        if (sessionBean.getAttributes().containsKey("idsolicitudentregalotes")) {
+
+        System.out.println("Buscando info de la solictud si existe");
+        if (sessionBean.getAttributes().containsKey("idsolicitudentregalotes")&&(Integer)sessionBean.getAttributes().get("idsolicitudentregalotes")!=0) {
             Integer id = (Integer) sessionBean.getAttributes().get("idsolicitudentregalotes");
             elemento = sessionBean.marketingFacade.getSolicitudentregalotesbono(id);
         } else {
@@ -62,17 +69,16 @@ public class GeneradorSolicitudLotesBonos {
             List<Solicitudentregalotes> solicitudesentregalotes = new ArrayList<Solicitudentregalotes>();
             for (Lotesbonos lotesbonose : lotesbonoses) {
                 Solicitudentregalotes s = new Solicitudentregalotes();
-                s.setDenominacionesid(lotesbonose.getDenominacion());
-                s.setIdCasino(lotesbonose.getIdCasino());
-                s.setTiposBonosid(lotesbonose.getTipoBono());
-                s.setDesde(lotesbonose.getHasta());
+                s.setLotesBonosid(lotesbonose);
+                s.setCantidad(0);
                 solicitudesentregalotes.add(s);
             }
             elemento.setSolicitudentregalotesList(solicitudesentregalotes);
             System.out.println("Buscando Casinos");
-            casinos = sessionBean.adminFacade.findAllCasinos();
             System.out.println("Encontrados Casinos");
         }
+        
+        casinos = sessionBean.adminFacade.findAllCasinos();
     }
 
     public Solicitudentregalotesmaestro getElemento() {
@@ -84,10 +90,22 @@ public class GeneradorSolicitudLotesBonos {
     }
 
     public void guardar() {
-        elemento.setUsuariosidUsuario(sessionBean.getUsuario().getIdUsuario());
-        sessionBean.marketingFacade.guardarSolicitudentregabonos(elemento);
-        sessionBean.registrarlog("Generada solicitud Usuario:" + sessionBean.getUsuario().getNombreUsuario());
-        FacesUtil.addInfoMessage("Solicitud guardada con exito!", "Notificación enviada");
+        try {
+            elemento.setRemitente(sessionBean.getUsuario().getIdUsuario());
+            elemento.setEstado("CREADA");
+            DateFormat df = new SimpleDateFormat("dd/MMMM/yyyy HH:mm:ss");
+            DateFormat df2 = new SimpleDateFormat("dd/MMMM/yyyy HH:mm:ss");
+            TimeZone timeZone = TimeZone.getTimeZone("GMT-5");
+            df.setTimeZone(timeZone);
+            Calendar nowDate = Calendar.getInstance();
+            nowDate.setTime(df2.parse(df.format(nowDate.getTime())));
+            elemento.setFecha(nowDate.getTime());
+            sessionBean.marketingFacade.guardarSolicitudentregabonos(elemento);
+            sessionBean.registrarlog("Generada solicitud Usuario:" + sessionBean.getUsuario().getNombreUsuario());
+            FacesUtil.addInfoMessage("Solicitud guardada con exito!", "Notificación enviada");
+        } catch (ParseException ex) {
+            Logger.getLogger(GeneradorSolicitudLotesBonos.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public Casinos getCasinoById(Integer idCasino) {
@@ -97,4 +115,8 @@ public class GeneradorSolicitudLotesBonos {
         }
         return new Casinos();
     }
+    public String getNombreDeUsuario(Integer id){
+        return sessionBean.sessionFacade.getNombreDeUsuario(id);
+    }
+    
 }

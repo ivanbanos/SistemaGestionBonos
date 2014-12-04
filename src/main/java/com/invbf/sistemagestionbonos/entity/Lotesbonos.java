@@ -6,7 +6,9 @@
 package com.invbf.sistemagestionbonos.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,10 +18,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -33,7 +37,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Lotesbonos.findById", query = "SELECT l FROM Lotesbonos l WHERE l.id = :id"),
     @NamedQuery(name = "Lotesbonos.findByDesde", query = "SELECT l FROM Lotesbonos l WHERE l.desde = :desde"),
     @NamedQuery(name = "Lotesbonos.findByHasta", query = "SELECT l FROM Lotesbonos l WHERE l.hasta = :hasta"),
-    @NamedQuery(name = "Lotesbonos.findByIdCasino", query = "SELECT l FROM Lotesbonos l WHERE l.idCasino = :idCasino")})
+    @NamedQuery(name = "Lotesbonos.findByIdCasino", query = "SELECT l FROM Lotesbonos l WHERE l.idCasino = :idCasino"),
+    @NamedQuery(name = "getexistesnte", query = "SELECT l FROM Lotesbonos l WHERE l.idCasino = :idCasino AND l.denominacion = :denominacion AND l.tipoBono = :tipoBono")})
 public class Lotesbonos implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -55,12 +60,16 @@ public class Lotesbonos implements Serializable {
     @NotNull
     @Column(name = "idCasino")
     private int idCasino;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "lotesBonosid")
+    private List<Solicitudentregalotes> solicitudentregalotesList;
     @JoinColumn(name = "TipoBono", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Tiposbonos tipoBono;
     @JoinColumn(name = "Denominacion", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Denominaciones denominacion;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "lotesBonosid")
+    private List<Bonosnofisicos> bonosnofisicosList;
 
     public Lotesbonos() {
     }
@@ -108,6 +117,15 @@ public class Lotesbonos implements Serializable {
         this.idCasino = idCasino;
     }
 
+    @XmlTransient
+    public List<Solicitudentregalotes> getSolicitudentregalotesList() {
+        return solicitudentregalotesList;
+    }
+
+    public void setSolicitudentregalotesList(List<Solicitudentregalotes> solicitudentregalotesList) {
+        this.solicitudentregalotesList = solicitudentregalotesList;
+    }
+
     public Tiposbonos getTipoBono() {
         return tipoBono;
     }
@@ -122,6 +140,15 @@ public class Lotesbonos implements Serializable {
 
     public void setDenominacion(Denominaciones denominacion) {
         this.denominacion = denominacion;
+    }
+
+    @XmlTransient
+    public List<Bonosnofisicos> getBonosnofisicosList() {
+        return bonosnofisicosList;
+    }
+
+    public void setBonosnofisicosList(List<Bonosnofisicos> bonosnofisicosList) {
+        this.bonosnofisicosList = bonosnofisicosList;
     }
 
     @Override

@@ -5,7 +5,7 @@
  */
 package com.invbf.sistemagestionbonos.dao;
 
-import com.invbf.sistemagestionbonos.entity.Lotesbonos;
+import com.invbf.sistemagestionbonos.entity.Accesos;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -17,18 +17,41 @@ import javax.persistence.Persistence;
  *
  * @author ivan
  */
-public class LotebonoDao {
-
-    public static void create(Lotesbonos elemento) {
-
-        EntityManagerFactory emf
-                = Persistence.createEntityManagerFactory("gestionBonosPU");
+public class AccesoDao {
+    public AccesoDao() {
+    }
+    
+    public static void create(Accesos cargo) {
+    
+        cargo.setNombre(cargo.getNombre().toUpperCase());
+        EntityManagerFactory emf =
+                Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
 
         tx.begin();
         try {
-            em.persist(elemento);
+            em.persist(cargo);
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+}
+
+        em.close();
+        emf.close();
+    }
+    
+    public static void edit(Accesos cargo) {
+        
+        cargo.setNombre(cargo.getNombre().toUpperCase());
+        EntityManagerFactory emf =
+                Persistence.createEntityManagerFactory("gestionBonosPU");
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+
+        tx.begin();
+        try {
+            em.merge(cargo);
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
@@ -38,15 +61,15 @@ public class LotebonoDao {
         emf.close();
     }
 
-    public static void edit(Lotesbonos elemento) {
-        EntityManagerFactory emf
-                = Persistence.createEntityManagerFactory("gestionBonosPU");
+    public static void remove(Accesos cargo) {
+        EntityManagerFactory emf =
+                Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
 
         tx.begin();
         try {
-            em.merge(elemento);
+            em.remove(em.merge(cargo));
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
@@ -56,19 +79,16 @@ public class LotebonoDao {
         emf.close();
     }
 
-    public static boolean existeLote(Lotesbonos elemento) {
-        EntityManagerFactory emf
-                = Persistence.createEntityManagerFactory("gestionBonosPU");
+    public static Accesos find(Integer id) {
+        EntityManagerFactory emf =
+                Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
-        List<Lotesbonos> cargos = null;
+        Accesos cargo = null;
+
         tx.begin();
         try {
-            cargos = (List<Lotesbonos>) em.createNamedQuery("getexistesnte")
-                .setParameter("idCasino", elemento.getIdCasino())
-                .setParameter("denominacion", elemento.getDenominacion())
-                .setParameter("tipoBono", elemento.getTipoBono())
-                    .getResultList();
+            cargo = em.find(Accesos.class, id);
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
@@ -76,67 +96,25 @@ public class LotebonoDao {
 
         em.close();
         emf.close();
-        if (cargos == null || cargos.isEmpty()) {
-            return false;
-        } return true;
+        return cargo;
     }
 
-    public LotebonoDao() {
-    }
-
-    public static void remove(Lotesbonos elemento) {
-        EntityManagerFactory emf
-                = Persistence.createEntityManagerFactory("gestionBonosPU");
+    public static List<Accesos> findAll() {
+        EntityManagerFactory emf =
+                Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
-
-        tx.begin();
-        try {
-            em.remove(em.merge(elemento));
-            tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-        }
-
-        em.close();
-        emf.close();
-    }
-
-    public static Lotesbonos find(Integer id) {
-        EntityManagerFactory emf
-                = Persistence.createEntityManagerFactory("gestionBonosPU");
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        Lotesbonos elemento = null;
-
-        tx.begin();
-        try {
-            elemento = em.find(Lotesbonos.class, id);
-            tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-        }
-
-        em.close();
-        emf.close();
-        return elemento;
-    }
-
-    public static List<Lotesbonos> findAll() {
-        EntityManagerFactory emf
-                = Persistence.createEntityManagerFactory("gestionBonosPU");
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        List<Lotesbonos> lista = new ArrayList<Lotesbonos>();
+        List<Accesos> lista = new ArrayList<Accesos>();
 
         tx.begin();
         try {
             javax.persistence.criteria.CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Lotesbonos.class));
+            cq.select(cq.from(Accesos.class));
             lista = em.createQuery(cq).getResultList();
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
+            System.out.println(e);
         }
 
         em.close();
@@ -144,17 +122,17 @@ public class LotebonoDao {
         return lista;
     }
 
-    public static List<Lotesbonos> findRange(int[] range) {
-        EntityManagerFactory emf
-                = Persistence.createEntityManagerFactory("gestionBonosPU");
+    public static List<Accesos> findRange(int[] range) {
+        EntityManagerFactory emf =
+                Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
-        List<Lotesbonos> lista = new ArrayList<Lotesbonos>();
+        List<Accesos> lista = new ArrayList<Accesos>();
 
         tx.begin();
         try {
             javax.persistence.criteria.CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Lotesbonos.class));
+            cq.select(cq.from(Accesos.class));
             javax.persistence.Query q = em.createQuery(cq);
             q.setMaxResults(range[1] - range[0]);
             q.setFirstResult(range[0]);
@@ -170,8 +148,8 @@ public class LotebonoDao {
     }
 
     public static int count() {
-        EntityManagerFactory emf
-                = Persistence.createEntityManagerFactory("gestionBonosPU");
+        EntityManagerFactory emf =
+                Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         int count = 0;
@@ -179,7 +157,7 @@ public class LotebonoDao {
         tx.begin();
         try {
             javax.persistence.criteria.CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            javax.persistence.criteria.Root<Lotesbonos> rt = cq.from(Lotesbonos.class);
+            javax.persistence.criteria.Root<Accesos> rt = cq.from(Accesos.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             javax.persistence.Query q = em.createQuery(cq);
             count = ((Long) q.getSingleResult()).intValue();
@@ -192,5 +170,32 @@ public class LotebonoDao {
         emf.close();
         return count;
 
+
+    }
+
+    public static Accesos findByNombreAcceso(String nombre) {
+        EntityManagerFactory emf =
+                Persistence.createEntityManagerFactory("gestionBonosPU");
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        List<Accesos> cargos = null;
+        tx.begin();
+        try {
+            cargos = (List<Accesos>) em.createNamedQuery("Accesos.findByNombre")
+                    .setParameter("nombre", nombre)
+                    .getResultList();
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+        }
+
+        em.close();
+        emf.close();
+
+        if (cargos == null || cargos.isEmpty()) {
+            return null;
+        } else {
+            return cargos.get(0);
+        }
     }
 }

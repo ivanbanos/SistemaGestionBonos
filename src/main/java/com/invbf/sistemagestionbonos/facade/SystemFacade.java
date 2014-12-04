@@ -8,8 +8,10 @@ import com.invbf.sistemagestionbonos.entity.Configuraciones;
 import com.invbf.sistemagestionbonos.entitySGC.Usuarios;
 import com.invbf.sistemagestionbonos.exceptions.ClavesNoConcuerdanException;
 import com.invbf.sistemagestionbonos.exceptions.NoCambioContrasenaException;
+import com.invbf.sistemagestionbonos.exceptions.UsuarioInactivoException;
 import com.invbf.sistemagestionbonos.exceptions.UsuarioNoConectadoException;
 import com.invbf.sistemagestionbonos.exceptions.UsuarioNoExisteException;
+import com.invbf.sistemagestionbonos.exceptions.UsuarioSinAccesoalSistemaException;
 
 
 /**
@@ -18,7 +20,7 @@ import com.invbf.sistemagestionbonos.exceptions.UsuarioNoExisteException;
  */
 public interface SystemFacade {
 
-    public Usuarios iniciarSession(Usuarios usuario)throws ClavesNoConcuerdanException, UsuarioNoExisteException, UsuarioNoConectadoException ;
+    public Usuarios iniciarSession(Usuarios usuario)throws ClavesNoConcuerdanException, UsuarioNoExisteException, UsuarioNoConectadoException,UsuarioInactivoException, UsuarioSinAccesoalSistemaException ;
 
     public Usuarios actualizarUsuario(Usuarios usuario);
 
@@ -29,4 +31,6 @@ public interface SystemFacade {
     public void registrarlog(String string);
 
     public Usuarios getUsuario(Integer idUsuario);
+
+    public String getNombreDeUsuario(Integer id);
 }

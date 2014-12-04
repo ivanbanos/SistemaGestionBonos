@@ -9,6 +9,7 @@ import com.invbf.sistemagestionbonos.dao.CasinoDao;
 import com.invbf.sistemagestionbonos.dao.DenominacionDao;
 import com.invbf.sistemagestionbonos.dao.TipoBonoDao;
 import com.invbf.sistemagestionbonos.entity.Denominaciones;
+import com.invbf.sistemagestionbonos.entity.Solicitudentregalotesmaestro;
 import com.invbf.sistemagestionbonos.entity.Tiposbonos;
 import com.invbf.sistemagestionbonos.entitySGC.Casinos;
 import com.invbf.sistemagestionbonos.facade.AdminFacade;

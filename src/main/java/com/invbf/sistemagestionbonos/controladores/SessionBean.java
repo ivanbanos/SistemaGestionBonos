@@ -9,8 +9,10 @@ import com.invbf.sistemagestionbonos.entitySGC.Formularios;
 import com.invbf.sistemagestionbonos.entitySGC.Usuarios;
 import com.invbf.sistemagestionbonos.entitySGC.Vistas;
 import com.invbf.sistemagestionbonos.exceptions.ClavesNoConcuerdanException;
+import com.invbf.sistemagestionbonos.exceptions.UsuarioInactivoException;
 import com.invbf.sistemagestionbonos.exceptions.UsuarioNoConectadoException;
 import com.invbf.sistemagestionbonos.exceptions.UsuarioNoExisteException;
+import com.invbf.sistemagestionbonos.exceptions.UsuarioSinAccesoalSistemaException;
 import com.invbf.sistemagestionbonos.facade.AdminFacade;
 import com.invbf.sistemagestionbonos.facade.MarketingFacade;
 import com.invbf.sistemagestionbonos.facade.SystemFacade;
@@ -58,7 +60,7 @@ public class SessionBean implements Serializable, Subject {
     public void init() {
         sessionFacade = new SystemFacadeImpl();
         adminFacade = new AdminFacadeImpl();
-        marketingFacade=new MarketingFacadeImpl();
+        marketingFacade = new MarketingFacadeImpl();
         usuario = new Usuarios();
         Attributes = new HashMap<String, Object>();
         observers = new ArrayList<Observer>();
@@ -92,6 +94,12 @@ public class SessionBean implements Serializable, Subject {
             usuario = new Usuarios();
         } catch (UsuarioNoConectadoException ex) {
             FacesUtil.addErrorMessage("Usuario no conectado", ex.getMessage());
+            usuario = new Usuarios();
+        }catch (UsuarioInactivoException ex) {
+            FacesUtil.addErrorMessage("Usuario inactivo", ex.getMessage());
+            usuario = new Usuarios();
+        } catch (UsuarioSinAccesoalSistemaException ex) {
+            FacesUtil.addErrorMessage("Usuario sin acceso", ex.getMessage());
             usuario = new Usuarios();
         }
         return "";
@@ -230,9 +238,15 @@ public class SessionBean implements Serializable, Subject {
         } else if (page.equals("atributosbonos")) {
             active = "atributosbonos";
             return "/pages/AtributosBonos.xhtml";
-        }else if (page.equals("GenerarSolicitudLotesBonos")) {
+        } else if (page.equals("GenerarSolicitudLotesBonos")) {
             active = "lotesdebonos";
             return "/pages/GeneradorSolicitudLoteBono.xhtml";
+        }else if (page.equals("listasolicitudlotes")) {
+            active = "lotesdebonos";
+            return "/pages/ListaSolicitudLotesBonosView.xhtml";
+        }else if (page.equals("LoteBono")) {
+            active = "lotesdebonos";
+            return "/pages/AdminLotesBonos.xhtml";
         }
         return "/pages/InicioSession.xhtml";
     }

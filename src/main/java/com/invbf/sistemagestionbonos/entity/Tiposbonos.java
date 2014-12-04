@@ -46,8 +46,6 @@ public class Tiposbonos implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "nombre")
     private String nombre;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tiposBonosid")
-    private List<Solicitudentregalotes> solicitudentregalotesList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoBono")
     private List<Lotesbonos> lotesbonosList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoBono")
@@ -81,15 +79,6 @@ public class Tiposbonos implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    @XmlTransient
-    public List<Solicitudentregalotes> getSolicitudentregalotesList() {
-        return solicitudentregalotesList;
-    }
-
-    public void setSolicitudentregalotesList(List<Solicitudentregalotes> solicitudentregalotesList) {
-        this.solicitudentregalotesList = solicitudentregalotesList;
     }
 
     @XmlTransient

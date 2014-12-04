@@ -29,5 +29,5 @@ public interface AdminFacade {
     public boolean guardarTiposbonos(Tiposbonos elemento);
 
     public List<Casinos> findAllCasinos();
-    
+
 }

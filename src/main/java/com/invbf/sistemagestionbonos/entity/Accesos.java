@@ -8,17 +8,19 @@ package com.invbf.sistemagestionbonos.entity;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -27,13 +29,13 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author ivan
  */
 @Entity
-@Table(name = "denominaciones")
+@Table(name = "accesos")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Denominaciones.findAll", query = "SELECT d FROM Denominaciones d"),
-    @NamedQuery(name = "Denominaciones.findById", query = "SELECT d FROM Denominaciones d WHERE d.id = :id"),
-    @NamedQuery(name = "Denominaciones.findByValor", query = "SELECT d FROM Denominaciones d WHERE d.valor = :valor")})
-public class Denominaciones implements Serializable {
+    @NamedQuery(name = "Accesos.findAll", query = "SELECT a FROM Accesos a"),
+    @NamedQuery(name = "Accesos.findById", query = "SELECT a FROM Accesos a WHERE a.id = :id"),
+    @NamedQuery(name = "Accesos.findByNombre", query = "SELECT a FROM Accesos a WHERE a.nombre = :nombre")})
+public class Accesos implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,23 +44,25 @@ public class Denominaciones implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "valor")
-    private float valor;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "denominacion")
-    private List<Lotesbonos> lotesbonosList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "denominacion")
-    private List<Bono> bonoList;
+    @Size(min = 1, max = 45)
+    @Column(name = "nombre")
+    private String nombre;
+    @JoinTable(name = "usuariosdetalles_has_accesos", joinColumns = {
+        @JoinColumn(name = "Accesos_id", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario")})
+    @ManyToMany
+    private List<Usuariosdetalles> usuariosdetallesList;
 
-    public Denominaciones() {
+    public Accesos() {
     }
 
-    public Denominaciones(Integer id) {
+    public Accesos(Integer id) {
         this.id = id;
     }
 
-    public Denominaciones(Integer id, float valor) {
+    public Accesos(Integer id, String nombre) {
         this.id = id;
-        this.valor = valor;
+        this.nombre = nombre;
     }
 
     public Integer getId() {
@@ -69,30 +73,21 @@ public class Denominaciones implements Serializable {
         this.id = id;
     }
 
-    public float getValor() {
-        return valor;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setValor(float valor) {
-        this.valor = valor;
-    }
-
-    @XmlTransient
-    public List<Lotesbonos> getLotesbonosList() {
-        return lotesbonosList;
-    }
-
-    public void setLotesbonosList(List<Lotesbonos> lotesbonosList) {
-        this.lotesbonosList = lotesbonosList;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     @XmlTransient
-    public List<Bono> getBonoList() {
-        return bonoList;
+    public List<Usuariosdetalles> getUsuariosdetallesList() {
+        return usuariosdetallesList;
     }
 
-    public void setBonoList(List<Bono> bonoList) {
-        this.bonoList = bonoList;
+    public void setUsuariosdetallesList(List<Usuariosdetalles> usuariosdetallesList) {
+        this.usuariosdetallesList = usuariosdetallesList;
     }
 
     @Override
@@ -105,10 +100,10 @@ public class Denominaciones implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Denominaciones)) {
+        if (!(object instanceof Accesos)) {
             return false;
         }
-        Denominaciones other = (Denominaciones) object;
+        Accesos other = (Accesos) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -117,7 +112,7 @@ public class Denominaciones implements Serializable {
 
     @Override
     public String toString() {
-        return "com.invbf.sistemagestionbonos.entity.Denominaciones[ id=" + id + " ]";
+        return "com.invbf.sistemagestionbonos.entity.Accesos[ id=" + id + " ]";
     }
     
 }

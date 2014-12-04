@@ -31,11 +31,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Logs.findAll", query = "SELECT l FROM Logs l"),
     @NamedQuery(name = "Logs.findByIdLogs", query = "SELECT l FROM Logs l WHERE l.idLogs = :idLogs"),
-    @NamedQuery(name = "Logs.findByMensaje", query = "SELECT l FROM Logs l WHERE l.mensaje = :mensaje")})
+    @NamedQuery(name = "Logs.findByMensaje", query = "SELECT l FROM Logs l WHERE l.mensaje = :mensaje"),
+    @NamedQuery(name = "Logs.findByFecha", query = "SELECT l FROM Logs l WHERE l.fecha = :fecha")})
 public class Logs implements Serializable {
-    @Column(name = "fecha")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fecha;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,6 +43,9 @@ public class Logs implements Serializable {
     @Size(max = 400)
     @Column(name = "mensaje")
     private String mensaje;
+    @Column(name = "fecha")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fecha;
 
     public Logs() {
     }
@@ -67,6 +68,14 @@ public class Logs implements Serializable {
 
     public void setMensaje(String mensaje) {
         this.mensaje = mensaje;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
     }
 
     @Override
@@ -92,14 +101,6 @@ public class Logs implements Serializable {
     @Override
     public String toString() {
         return "com.invbf.sistemagestionbonos.entity.Logs[ idLogs=" + idLogs + " ]";
-    }
-
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
     }
     
 }

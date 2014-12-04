@@ -18,9 +18,13 @@
                             <h:commandLink  action="#{sessionBean.go(&quot;atributosbonos&quot;)}" class="btn btn-primary btn-lg">
                                 <i class="fa fa-users fa-5x"></i> <br/>#{label['atributosbono']}</h:commandLink>
                         </c:if>
-                        <c:if test="#{sessionBean.perfilViewMatch(&quot;GenerarSolicitudLotesBonos&quot;)}">
-                            <h:commandLink  action="#{sessionBean.go(&quot;GenerarSolicitudLotesBonos&quot;)}" class="btn btn-primary btn-lg">
-                                <i class="fa fa-users fa-5x"></i> <br/>#{label['Solicitarentregalotesbonos']}</h:commandLink>
+                        <c:if test="#{sessionBean.perfilViewMatch(&quot;SolicitudLotes&quot;)}">
+                            <h:commandLink  action="#{sessionBean.go(&quot;listasolicitudlotes&quot;)}" class="btn btn-primary btn-lg">
+                                <i class="fa fa-users fa-5x"></i> <br/>#{label['listasolicitudeslotesbonos']}</h:commandLink>
+                        </c:if>
+                        <c:if test="#{sessionBean.perfilViewMatch(&quot;LoteBono&quot;)}">
+                            <h:commandLink  action="#{sessionBean.go(&quot;LoteBono&quot;)}" class="btn btn-primary btn-lg">
+                                <i class="fa fa-users fa-5x"></i> <br/>#{label['lotesdebonos']}</h:commandLink>
                         </c:if>
                         <h:commandLink  action="#{sessionBean.go(&quot;cuenta&quot;)}" class="btn btn-primary btn-lg"><i class="fa fa-pencil fa-5x"></i> 
                             <br/>#{label['cuentausuarios']}</h:commandLink>

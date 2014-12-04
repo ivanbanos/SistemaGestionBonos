@@ -9,11 +9,14 @@ import com.invbf.sistemagestionbonos.util.Notificador;
 import com.invbf.sistemagestionbonos.dao.LotebonoDao;
 import com.invbf.sistemagestionbonos.dao.SolicitudentregalotesDao;
 import com.invbf.sistemagestionbonos.dao.SolicitudentregalotesmaestroDao;
-import com.invbf.sistemagestionbonos.dao.TipoBonoDao;
 import com.invbf.sistemagestionbonos.entity.Lotesbonos;
 import com.invbf.sistemagestionbonos.entity.Solicitudentregalotes;
 import com.invbf.sistemagestionbonos.entity.Solicitudentregalotesmaestro;
+import com.invbf.sistemagestionbonos.exceptions.ExistenBonosFisicosException;
+import com.invbf.sistemagestionbonos.exceptions.LoteBonosExistenteException;
 import com.invbf.sistemagestionbonos.facade.MarketingFacade;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -51,5 +54,55 @@ public class MarketingFacadeImpl implements MarketingFacade{
             return true;
         }
     }
+
+    @Override
+    public List<Solicitudentregalotesmaestro> getAllSolicitudentregalotesmaestro() {
+        return SolicitudentregalotesmaestroDao.findAll();
+    }
+
+    @Override
+    public void deleteSolicitudentregalotesmaestro(Solicitudentregalotesmaestro elemento) {
+        for(Solicitudentregalotes sel: elemento.getSolicitudentregalotesList()){
+            SolicitudentregalotesDao.remove(sel);
+        }
+        SolicitudentregalotesmaestroDao.remove(elemento);
+    }
+
+    @Override
+    public void editLoteBono(Lotesbonos lotesBonosid) {
+        LotebonoDao.edit(lotesBonosid);
+    }
+
+    @Override
+    public List<Solicitudentregalotesmaestro> getSolicitudentregalotesmaestroNoAceptadas() {
+        return SolicitudentregalotesmaestroDao.findNoAceptadas();
+    }
+
+    @Override
+    public void borrarLote(Lotesbonos elemento) throws ExistenBonosFisicosException {
+        if(elemento.getDesde().equals(elemento.getHasta())){
+            for (Iterator<Solicitudentregalotes> iterator = elemento.getSolicitudentregalotesList().iterator(); iterator.hasNext();) {
+                Solicitudentregalotes next = iterator.next();
+                SolicitudentregalotesDao.remove(next);
+                
+            }
+            elemento.getSolicitudentregalotesList().clear();
+            LotebonoDao.remove(elemento);
+        } else {
+            throw new ExistenBonosFisicosException();
+        }
+    }
+
+    @Override
+    public void guardarLote(Lotesbonos elemento) throws LoteBonosExistenteException {
+        if(!LotebonoDao.existeLote(elemento)){
+            elemento.setSolicitudentregalotesList(new ArrayList<Solicitudentregalotes>());
+            LotebonoDao.create(elemento);
+            
+        } else {
+            throw new LoteBonosExistenteException();
+        }
+    }
+
     
 }

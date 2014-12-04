@@ -40,15 +40,15 @@ public class Solicitudentregaclientes implements Serializable {
     @Size(max = 45)
     @Column(name = "observaciones")
     private String observaciones;
-    @JoinColumn(name = "SolicitudEntregaid", referencedColumnName = "id", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Solicitudentrega solicitudentrega;
-    @JoinColumn(name = "Clientesid", referencedColumnName = "id", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Clientessgb clientessgb;
     @JoinColumn(name = "Areaid", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Areas areaid;
+    @JoinColumn(name = "Clientesid", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Clientessgb clientessgb;
+    @JoinColumn(name = "SolicitudEntregaid", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Solicitudentrega solicitudentrega;
 
     public Solicitudentregaclientes() {
     }
@@ -85,12 +85,12 @@ public class Solicitudentregaclientes implements Serializable {
         this.observaciones = observaciones;
     }
 
-    public Solicitudentrega getSolicitudentrega() {
-        return solicitudentrega;
+    public Areas getAreaid() {
+        return areaid;
     }
 
-    public void setSolicitudentrega(Solicitudentrega solicitudentrega) {
-        this.solicitudentrega = solicitudentrega;
+    public void setAreaid(Areas areaid) {
+        this.areaid = areaid;
     }
 
     public Clientessgb getClientessgb() {
@@ -101,12 +101,12 @@ public class Solicitudentregaclientes implements Serializable {
         this.clientessgb = clientessgb;
     }
 
-    public Areas getAreaid() {
-        return areaid;
+    public Solicitudentrega getSolicitudentrega() {
+        return solicitudentrega;
     }
 
-    public void setAreaid(Areas areaid) {
-        this.areaid = areaid;
+    public void setSolicitudentrega(Solicitudentrega solicitudentrega) {
+        this.solicitudentrega = solicitudentrega;
     }
 
     @Override

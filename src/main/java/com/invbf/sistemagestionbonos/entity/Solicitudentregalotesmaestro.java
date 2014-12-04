@@ -37,20 +37,15 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Solicitudentregalotesmaestro.findAll", query = "SELECT s FROM Solicitudentregalotesmaestro s"),
     @NamedQuery(name = "Solicitudentregalotesmaestro.findById", query = "SELECT s FROM Solicitudentregalotesmaestro s WHERE s.id = :id"),
     @NamedQuery(name = "Solicitudentregalotesmaestro.findByFecha", query = "SELECT s FROM Solicitudentregalotesmaestro s WHERE s.fecha = :fecha"),
-    @NamedQuery(name = "Solicitudentregalotesmaestro.findByObservaciones", query = "SELECT s FROM Solicitudentregalotesmaestro s WHERE s.observaciones = :observaciones")})
+    @NamedQuery(name = "Solicitudentregalotesmaestro.findByObservaciones", query = "SELECT s FROM Solicitudentregalotesmaestro s WHERE s.observaciones = :observaciones"),
+    @NamedQuery(name = "Solicitudentregalotesmaestro.findByEstado", query = "SELECT s FROM Solicitudentregalotesmaestro s WHERE s.estado = :estado"),
+    @NamedQuery(name = "Solicitudentregalotesmaestro.findNoAceptada", query = "SELECT s FROM Solicitudentregalotesmaestro s WHERE s.estado != 'ACEPTADA'"),
+    @NamedQuery(name = "Solicitudentregalotesmaestro.findByRemitente", query = "SELECT s FROM Solicitudentregalotesmaestro s WHERE s.remitente = :remitente")})
 public class Solicitudentregalotesmaestro implements Serializable {
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "remitente")
-    private int usuariosidUsuario;
-    @Size(max = 45)
-    @Column(name = "estado")
-    private String estado;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
     private Integer id;
     @Column(name = "fecha")
@@ -59,6 +54,13 @@ public class Solicitudentregalotesmaestro implements Serializable {
     @Size(max = 450)
     @Column(name = "observaciones")
     private String observaciones;
+    @Size(max = 45)
+    @Column(name = "estado")
+    private String estado;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "remitente")
+    private int remitente;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "solicitudEntregaLotesMaestro")
     private List<Solicitudentregalotes> solicitudentregalotesList;
 
@@ -67,6 +69,11 @@ public class Solicitudentregalotesmaestro implements Serializable {
 
     public Solicitudentregalotesmaestro(Integer id) {
         this.id = id;
+    }
+
+    public Solicitudentregalotesmaestro(Integer id, int remitente) {
+        this.id = id;
+        this.remitente = remitente;
     }
 
     public Integer getId() {
@@ -91,6 +98,22 @@ public class Solicitudentregalotesmaestro implements Serializable {
 
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public int getRemitente() {
+        return remitente;
+    }
+
+    public void setRemitente(int remitente) {
+        this.remitente = remitente;
     }
 
     @XmlTransient
@@ -125,22 +148,6 @@ public class Solicitudentregalotesmaestro implements Serializable {
     @Override
     public String toString() {
         return "com.invbf.sistemagestionbonos.entity.Solicitudentregalotesmaestro[ id=" + id + " ]";
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public int getUsuariosidUsuario() {
-        return usuariosidUsuario;
-    }
-
-    public void setUsuariosidUsuario(int usuariosidUsuario) {
-        this.usuariosidUsuario = usuariosidUsuario;
     }
     
 }

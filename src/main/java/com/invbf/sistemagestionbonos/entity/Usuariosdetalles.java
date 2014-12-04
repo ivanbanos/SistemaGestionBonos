@@ -6,11 +6,13 @@
 package com.invbf.sistemagestionbonos.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -18,6 +20,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -40,6 +43,8 @@ public class Usuariosdetalles implements Serializable {
     @Size(max = 45)
     @Column(name = "correo")
     private String correo;
+    @ManyToMany(mappedBy = "usuariosdetallesList")
+    private List<Accesos> accesosList;
     @JoinColumn(name = "idcargo", referencedColumnName = "idcargo")
     @ManyToOne
     private Cargos idcargo;
@@ -65,6 +70,15 @@ public class Usuariosdetalles implements Serializable {
 
     public void setCorreo(String correo) {
         this.correo = correo;
+    }
+
+    @XmlTransient
+    public List<Accesos> getAccesosList() {
+        return accesosList;
+    }
+
+    public void setAccesosList(List<Accesos> accesosList) {
+        this.accesosList = accesosList;
     }
 
     public Cargos getIdcargo() {

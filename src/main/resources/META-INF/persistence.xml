@@ -1,44 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-  <persistence-unit name="gestionBonosPU" transaction-type="RESOURCE_LOCAL">
-    <class>com.invbf.sistemagestionbonos.entity.Bono</class>
-    <class>com.invbf.sistemagestionbonos.entity.Solicitudcambiocupofidelizacion</class>
-    <class>com.invbf.sistemagestionbonos.entity.Configuraciones</class>
-    <class>com.invbf.sistemagestionbonos.entity.Lotesbonos</class>
-    <class>com.invbf.sistemagestionbonos.entity.Denominaciones</class>
-    <class>com.invbf.sistemagestionbonos.entity.Solicitudentregaclientes</class>
-    <class>com.invbf.sistemagestionbonos.entity.Tiposbonos</class>
-    <class>com.invbf.sistemagestionbonos.entity.Usuariosdetalles</class>
-    <class>com.invbf.sistemagestionbonos.entity.Notificaciones</class>
-    <class>com.invbf.sistemagestionbonos.entity.Cargos</class>
-    <class>com.invbf.sistemagestionbonos.entity.Solicitudentrega</class>
-    <class>com.invbf.sistemagestionbonos.entity.Propositosentrega</class>
-    <class>com.invbf.sistemagestionbonos.entity.Casinosdetalles</class>
-    <class>com.invbf.sistemagestionbonos.entity.Areas</class>
-    <class>com.invbf.sistemagestionbonos.entity.Clientessgb</class>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/easl4284_GestionBonos"/>
-      <property name="javax.persistence.jdbc.password" value="Luff1.kun"/>
-      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.user" value="root"/>
-    </properties>
-  </persistence-unit>
-  <persistence-unit name="inversionesPU" transaction-type="RESOURCE_LOCAL">
-    <class>com.invbf.sistemagestionbonos.entitySGC.Perfiles</class>
-    <class>com.invbf.sistemagestionbonos.entitySGC.Tiposdocumento</class>
-    <class>com.invbf.sistemagestionbonos.entitySGC.Categorias</class>
-    <class>com.invbf.sistemagestionbonos.entitySGC.Clientes</class>
-    <class>com.invbf.sistemagestionbonos.entitySGC.Casinos</class>
-    <class>com.invbf.sistemagestionbonos.entitySGC.Vistas</class>
-    <class>com.invbf.sistemagestionbonos.entitySGC.Usuarios</class>
-    <class>com.invbf.sistemagestionbonos.entitySGC.Formularios</class>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/easl4284_inversiones"/>
-      <property name="javax.persistence.jdbc.password" value="Luff1.kun"/>
-      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-      <property name="javax.persistence.jdbc.user" value="root"/>
-    </properties>
-  </persistence-unit>
+    <persistence-unit name="gestionBonosPU" transaction-type="RESOURCE_LOCAL">
+        <non-jta-data-source>java:comp/env/jdbc/sgbDS</non-jta-data-source>
+        <class>com.invbf.sistemagestionbonos.entity.Bono</class>
+        <class>com.invbf.sistemagestionbonos.entity.Solicitudcambiocupofidelizacion</class>
+        <class>com.invbf.sistemagestionbonos.entity.Configuraciones</class>
+        <class>com.invbf.sistemagestionbonos.entity.Lotesbonos</class>
+        <class>com.invbf.sistemagestionbonos.entity.Denominaciones</class>
+        <class>com.invbf.sistemagestionbonos.entity.Solicitudentregaclientes</class>
+        <class>com.invbf.sistemagestionbonos.entity.Tiposbonos</class>
+        <class>com.invbf.sistemagestionbonos.entity.Usuariosdetalles</class>
+        <class>com.invbf.sistemagestionbonos.entity.Notificaciones</class>
+        <class>com.invbf.sistemagestionbonos.entity.Cargos</class>
+        <class>com.invbf.sistemagestionbonos.entity.Solicitudentrega</class>
+        <class>com.invbf.sistemagestionbonos.entity.Propositosentrega</class>
+        <class>com.invbf.sistemagestionbonos.entity.Casinosdetalles</class>
+        <class>com.invbf.sistemagestionbonos.entity.Areas</class>
+        <class>com.invbf.sistemagestionbonos.entity.Clientessgb</class>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties/>
+    </persistence-unit>
+    <persistence-unit name="inversionesPU" transaction-type="RESOURCE_LOCAL">
+      
+        <non-jta-data-source>java:comp/env/jdbc/sgcDS</non-jta-data-source>
+        <class>com.invbf.sistemagestionbonos.entitySGC.Perfiles</class>
+        <class>com.invbf.sistemagestionbonos.entitySGC.Tiposdocumento</class>
+        <class>com.invbf.sistemagestionbonos.entitySGC.Categorias</class>
+        <class>com.invbf.sistemagestionbonos.entitySGC.Clientes</class>
+        <class>com.invbf.sistemagestionbonos.entitySGC.Casinos</class>
+        <class>com.invbf.sistemagestionbonos.entitySGC.Vistas</class>
+        <class>com.invbf.sistemagestionbonos.entitySGC.Usuarios</class>
+        <class>com.invbf.sistemagestionbonos.entitySGC.Formularios</class>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties/>
+    </persistence-unit>
 </persistence>

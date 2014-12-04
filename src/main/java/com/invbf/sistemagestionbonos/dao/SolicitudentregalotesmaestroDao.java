@@ -18,10 +18,13 @@ import javax.persistence.Persistence;
  * @author ivan
  */
 public class SolicitudentregalotesmaestroDao {
+
     public static void create(Solicitudentregalotesmaestro elemento) {
-        
-        EntityManagerFactory emf =
-                Persistence.createEntityManagerFactory("gestionBonosPU");
+        if (elemento.getObservaciones() != null) {
+            elemento.setObservaciones(elemento.getObservaciones().toUpperCase());
+        }
+        EntityManagerFactory emf
+                = Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
 
@@ -39,8 +42,11 @@ public class SolicitudentregalotesmaestroDao {
     }
 
     public static void edit(Solicitudentregalotesmaestro elemento) {
-        EntityManagerFactory emf =
-                Persistence.createEntityManagerFactory("gestionBonosPU");
+        if (elemento.getObservaciones() != null) {
+            elemento.setObservaciones(elemento.getObservaciones().toUpperCase());
+        }
+        EntityManagerFactory emf
+                = Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
 
@@ -57,8 +63,8 @@ public class SolicitudentregalotesmaestroDao {
     }
 
     public static void remove(Solicitudentregalotesmaestro elemento) {
-        EntityManagerFactory emf =
-                Persistence.createEntityManagerFactory("gestionBonosPU");
+        EntityManagerFactory emf
+                = Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
 
@@ -75,8 +81,8 @@ public class SolicitudentregalotesmaestroDao {
     }
 
     public static Solicitudentregalotesmaestro find(Integer id) {
-        EntityManagerFactory emf =
-                Persistence.createEntityManagerFactory("gestionBonosPU");
+        EntityManagerFactory emf
+                = Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         Solicitudentregalotesmaestro elemento = null;
@@ -95,8 +101,8 @@ public class SolicitudentregalotesmaestroDao {
     }
 
     public static List<Solicitudentregalotesmaestro> findAll() {
-        EntityManagerFactory emf =
-                Persistence.createEntityManagerFactory("gestionBonosPU");
+        EntityManagerFactory emf
+                = Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         List<Solicitudentregalotesmaestro> lista = new ArrayList<Solicitudentregalotesmaestro>();
@@ -117,8 +123,8 @@ public class SolicitudentregalotesmaestroDao {
     }
 
     public static List<Solicitudentregalotesmaestro> findRange(int[] range) {
-        EntityManagerFactory emf =
-                Persistence.createEntityManagerFactory("gestionBonosPU");
+        EntityManagerFactory emf
+                = Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         List<Solicitudentregalotesmaestro> lista = new ArrayList<Solicitudentregalotesmaestro>();
@@ -142,8 +148,8 @@ public class SolicitudentregalotesmaestroDao {
     }
 
     public static int count() {
-        EntityManagerFactory emf =
-                Persistence.createEntityManagerFactory("gestionBonosPU");
+        EntityManagerFactory emf
+                = Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         int count = 0;
@@ -164,6 +170,25 @@ public class SolicitudentregalotesmaestroDao {
         emf.close();
         return count;
 
+    }
 
+    public static List<Solicitudentregalotesmaestro> findNoAceptadas() {
+        EntityManagerFactory emf
+                = Persistence.createEntityManagerFactory("gestionBonosPU");
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        List<Solicitudentregalotesmaestro> cargos = null;
+        tx.begin();
+        try {
+            cargos = (List<Solicitudentregalotesmaestro>) em.createNamedQuery("Solicitudentregalotesmaestro.findNoAceptada")
+                    .getResultList();
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+        }
+
+        em.close();
+        emf.close();
+        return cargos;
     }
 }
