@@ -5,6 +5,7 @@
 package com.invbf.sistemagestionbonos.controladores;
 
 import com.invbf.sistemagestionbonos.entity.Configuraciones;
+import com.invbf.sistemagestionbonos.entity.Usuariosdetalles;
 import com.invbf.sistemagestionbonos.entitySGC.Formularios;
 import com.invbf.sistemagestionbonos.entitySGC.Usuarios;
 import com.invbf.sistemagestionbonos.entitySGC.Vistas;
@@ -45,6 +46,7 @@ public class SessionBean implements Serializable, Subject {
     AdminFacade adminFacade;
     MarketingFacade marketingFacade;
     private Usuarios usuario;//Almacena el objeto usuario de la session
+    private Usuariosdetalles usuarioDetalle;//Almacena el objeto usuario de la session
     private HashMap<String, Object> Attributes;
     private List<Observer> observers;
     private int paginacion;
@@ -83,6 +85,7 @@ public class SessionBean implements Serializable, Subject {
     public String Conectar() {
         try {
             usuario = sessionFacade.iniciarSession(usuario);
+            usuarioDetalle = sessionFacade.getDetalleUsuario(usuario.getIdUsuario());
             sessionFacade.registrarlog("Inicio de sesion del usuario " + usuario.getNombreUsuario());
             active = "inicio";
             return "/pages/index.xhtml";
@@ -228,8 +231,12 @@ public class SessionBean implements Serializable, Subject {
     }
 
     public String go(String page) {
-
-        if (page.equals("inicio")) {
+        System.out.println(page);
+        
+        if (page.equals("ClientesSGB")) {
+            active = "solicitudbonos";
+            return "/pages/ClientesSGB.xhtml";
+        }else if (page.equals("inicio")) {
             active = "inicio";
             return "/pages/index.xhtml";
         } else if (page.equals("cuenta")) {
@@ -247,6 +254,9 @@ public class SessionBean implements Serializable, Subject {
         }else if (page.equals("LoteBono")) {
             active = "lotesdebonos";
             return "/pages/AdminLotesBonos.xhtml";
+        }else if (page.equals("solicitudesbonos")) {
+            active = "solicitudbonos";
+            return "/pages/ListaSolicitudBono.xhtml";
         }
         return "/pages/InicioSession.xhtml";
     }
@@ -285,6 +295,14 @@ public class SessionBean implements Serializable, Subject {
 
     public void setObservers(List<Observer> observers) {
         this.observers = observers;
+    }
+
+    public Usuariosdetalles getUsuarioDetalle() {
+        return usuarioDetalle;
+    }
+
+    public void setUsuarioDetalle(Usuariosdetalles usuarioDetalle) {
+        this.usuarioDetalle = usuarioDetalle;
     }
 
 }

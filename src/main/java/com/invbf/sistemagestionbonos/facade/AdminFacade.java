@@ -5,9 +5,13 @@
  */
 package com.invbf.sistemagestionbonos.facade;
 
+import com.invbf.sistemagestionbonos.entity.Areas;
+import com.invbf.sistemagestionbonos.entity.Clientessgb;
 import com.invbf.sistemagestionbonos.entity.Denominaciones;
+import com.invbf.sistemagestionbonos.entity.Propositosentrega;
 import com.invbf.sistemagestionbonos.entity.Tiposbonos;
 import com.invbf.sistemagestionbonos.entitySGC.Casinos;
+import com.invbf.sistemagestionbonos.entitySGC.Usuarios;
 import java.util.List;
 
 /**
@@ -29,5 +33,27 @@ public interface AdminFacade {
     public boolean guardarTiposbonos(Tiposbonos elemento);
 
     public List<Casinos> findAllCasinos();
+
+    public List<Propositosentrega> findAllPropositosentrega();
+
+    public boolean guardarPropositosentrega(Propositosentrega elemento);
+
+    public void deletePropositosentrega(Propositosentrega elemento);
+
+    public List<Areas> findAllAreas();
+
+    public boolean guardarAreas(Areas elemento);
+
+    public void deleteAreas(Areas elemento);
+
+    public void deleteClientessgb(Clientessgb elemento);
+
+    public List<Clientessgb> findAllClientessgb();
+
+    public boolean guardarClientessgb(Clientessgb elemento);
+
+    public List<Clientessgb> findClientessgbByCasino(Casinos idCasino);
+
+    public List<Usuarios> findAllUsuarios();
 
 }

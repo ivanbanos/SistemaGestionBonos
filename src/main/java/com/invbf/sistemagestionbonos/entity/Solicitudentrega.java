@@ -57,6 +57,8 @@ public class Solicitudentrega implements Serializable {
     private Date fecha;
     @Column(name = "solicitante")
     private Integer solicitante;
+    @Column(name = "idCasino")
+    private Integer idCasino;
     @Column(name = "aprobador")
     private Integer aprobador;
     @Size(max = 400)
@@ -108,6 +110,14 @@ public class Solicitudentrega implements Serializable {
 
     public void setSolicitante(Integer solicitante) {
         this.solicitante = solicitante;
+    }
+
+    public Integer getIdCasino() {
+        return idCasino;
+    }
+
+    public void setIdCasino(Integer idCasino) {
+        this.idCasino = idCasino;
     }
 
     public Integer getAprobador() {

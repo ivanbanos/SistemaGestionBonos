@@ -5,6 +5,7 @@
 package com.invbf.sistemagestionbonos.facade;
 
 import com.invbf.sistemagestionbonos.entity.Configuraciones;
+import com.invbf.sistemagestionbonos.entity.Usuariosdetalles;
 import com.invbf.sistemagestionbonos.entitySGC.Usuarios;
 import com.invbf.sistemagestionbonos.exceptions.ClavesNoConcuerdanException;
 import com.invbf.sistemagestionbonos.exceptions.NoCambioContrasenaException;
@@ -33,4 +34,6 @@ public interface SystemFacade {
     public Usuarios getUsuario(Integer idUsuario);
 
     public String getNombreDeUsuario(Integer id);
+
+    public Usuariosdetalles getDetalleUsuario(Integer idUsuario);
 }

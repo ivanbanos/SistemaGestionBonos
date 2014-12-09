@@ -125,4 +125,9 @@ public class SystemFacadeImpl implements SystemFacade {
         }
     }
 
+    @Override
+    public Usuariosdetalles getDetalleUsuario(Integer idUsuario) {
+        return UsuarioDetalleDao.find(idUsuario);
+    }
+
 }

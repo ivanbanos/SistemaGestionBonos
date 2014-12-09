@@ -6,6 +6,7 @@
 package com.invbf.sistemagestionbonos.facade;
 
 import com.invbf.sistemagestionbonos.entity.Lotesbonos;
+import com.invbf.sistemagestionbonos.entity.Solicitudentrega;
 import com.invbf.sistemagestionbonos.entity.Solicitudentregalotesmaestro;
 import com.invbf.sistemagestionbonos.exceptions.ExistenBonosFisicosException;
 import com.invbf.sistemagestionbonos.exceptions.LoteBonosExistenteException;
@@ -34,5 +35,15 @@ public interface MarketingFacade {
     public void borrarLote(Lotesbonos elemento)throws ExistenBonosFisicosException;
 
     public void guardarLote(Lotesbonos elemento)throws LoteBonosExistenteException;
+
+    public void deleteSolicitudentrega(Solicitudentrega elemento);
+
+    public List<Solicitudentrega> getAllSolicitudentrega();
+
+    public List<Solicitudentrega> getAllSolicitudentregaSolicitante(Integer idUsuario);
+
+    public Solicitudentrega getSolicitudbono(Integer id);
+
+    public void guardarSolicitudentrega(Solicitudentrega elemento);
     
 }

@@ -87,6 +87,7 @@ public class ListaSolicitudesEntregaLotesBonosBean {
             Logger.getLogger(ListaSolicitudesEntregaLotesBonosBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
     public void goSolicitudAceptar(Integer i) {
         try {
             sessionBean.getAttributes().put("idsolicitudentregalotes", i);
