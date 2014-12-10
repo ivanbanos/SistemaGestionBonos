@@ -5,7 +5,7 @@
  */
 package com.invbf.sistemagestionbonos.dao;
 
-import com.invbf.sistemagestionbonos.entity.Clientessgb;
+import com.invbf.sistemagestionbonos.entity.Solicitudentregaclientes;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -17,15 +17,13 @@ import javax.persistence.Persistence;
  *
  * @author ivan
  */
-public class ClienteDao {
+public class SolicitudEntregaClientesDao {
 
-    public ClienteDao() {
+    public SolicitudEntregaClientesDao() {
     }
 
-    public static void create(Clientessgb cargo) {
+    public static void create(Solicitudentregaclientes cargo) {
 
-        cargo.setNombres(cargo.getNombres().toUpperCase());
-        cargo.setApellidos(cargo.getApellidos().toUpperCase());
         EntityManagerFactory emf
                 = Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
@@ -43,10 +41,8 @@ public class ClienteDao {
         emf.close();
     }
 
-    public static void edit(Clientessgb cargo) {
-
-        cargo.setNombres(cargo.getNombres().toUpperCase());
-        cargo.setApellidos(cargo.getApellidos().toUpperCase());
+    public static void edit(Solicitudentregaclientes cargo) {
+        System.out.println("Area"+cargo.getAreaid());
         EntityManagerFactory emf
                 = Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
@@ -64,7 +60,7 @@ public class ClienteDao {
         emf.close();
     }
 
-    public static void remove(Clientessgb cargo) {
+    public static void remove(Solicitudentregaclientes cargo) {
         EntityManagerFactory emf
                 = Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
@@ -82,16 +78,16 @@ public class ClienteDao {
         emf.close();
     }
 
-    public static Clientessgb find(Integer id) {
+    public static Solicitudentregaclientes find(Integer id) {
         EntityManagerFactory emf
                 = Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
-        Clientessgb cargo = null;
+        Solicitudentregaclientes cargo = null;
 
         tx.begin();
         try {
-            cargo = em.find(Clientessgb.class, id);
+            cargo = em.find(Solicitudentregaclientes.class, id);
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
@@ -102,17 +98,17 @@ public class ClienteDao {
         return cargo;
     }
 
-    public static List<Clientessgb> findAll() {
+    public static List<Solicitudentregaclientes> findAll() {
         EntityManagerFactory emf
                 = Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
-        List<Clientessgb> lista = new ArrayList<Clientessgb>();
+        List<Solicitudentregaclientes> lista = new ArrayList<Solicitudentregaclientes>();
 
         tx.begin();
         try {
             javax.persistence.criteria.CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Clientessgb.class));
+            cq.select(cq.from(Solicitudentregaclientes.class));
             lista = em.createQuery(cq).getResultList();
             tx.commit();
         } catch (Exception e) {
@@ -125,17 +121,17 @@ public class ClienteDao {
         return lista;
     }
 
-    public static List<Clientessgb> findRange(int[] range) {
+    public static List<Solicitudentregaclientes> findRange(int[] range) {
         EntityManagerFactory emf
                 = Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
-        List<Clientessgb> lista = new ArrayList<Clientessgb>();
+        List<Solicitudentregaclientes> lista = new ArrayList<Solicitudentregaclientes>();
 
         tx.begin();
         try {
             javax.persistence.criteria.CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Clientessgb.class));
+            cq.select(cq.from(Solicitudentregaclientes.class));
             javax.persistence.Query q = em.createQuery(cq);
             q.setMaxResults(range[1] - range[0]);
             q.setFirstResult(range[0]);
@@ -160,7 +156,7 @@ public class ClienteDao {
         tx.begin();
         try {
             javax.persistence.criteria.CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            javax.persistence.criteria.Root<Clientessgb> rt = cq.from(Clientessgb.class);
+            javax.persistence.criteria.Root<Solicitudentregaclientes> rt = cq.from(Solicitudentregaclientes.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             javax.persistence.Query q = em.createQuery(cq);
             count = ((Long) q.getSingleResult()).intValue();
@@ -175,26 +171,4 @@ public class ClienteDao {
 
     }
 
-    public static List<Clientessgb> findByIdCasino(Integer idCasino) {
-
-        EntityManagerFactory emf
-                = Persistence.createEntityManagerFactory("gestionBonosPU");
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        List<Clientessgb> cargos = null;
-        tx.begin();
-        try {
-            cargos = (List<Clientessgb>) em.createNamedQuery("Clientessgb.findByIdCasino")
-                    .setParameter("idCasino", idCasino)
-                    .getResultList();
-            tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-        }
-
-        em.close();
-        emf.close();
-
-        return cargos;
-    }
 }

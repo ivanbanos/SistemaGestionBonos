@@ -14,7 +14,10 @@
 
                 <div class="row">
                     <div class="col-xs-12 col-md-12 panel-body panel-bodyindex">
-                        <c:if test="#{sessionBean.perfilViewMatch(&quot;atributosbonos&quot;)}">
+                        <c:if test="#{sessionBean.perfilViewMatch(&quot;Propositos&quot;)
+                                      or sessionBean.perfilViewMatch(&quot;Areas&quot;)
+                                      or sessionBean.perfilViewMatch(&quot;denominaciones&quot;)
+                                      or sessionBean.perfilViewMatch(&quot;TipoBono&quot;)}">
                             <h:commandLink  action="#{sessionBean.go(&quot;atributosbonos&quot;)}" class="btn btn-primary btn-lg">
                                 <i class="fa fa-users fa-5x"></i> <br/>#{label['atributosbono']}</h:commandLink>
                         </c:if>

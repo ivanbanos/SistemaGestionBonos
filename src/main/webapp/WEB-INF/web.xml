@@ -23,7 +23,7 @@
     </welcome-file-list>
     <error-page>  
         <exception-type>java.lang.Throwable</exception-type>  
-        <location>/faces/pages/error.xhtml</location>  
+        <location>/faces/pages/InicioSession.xhtml</location>  
    </error-page> 
     
     <filter>

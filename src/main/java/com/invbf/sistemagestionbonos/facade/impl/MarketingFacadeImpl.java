@@ -5,13 +5,19 @@
  */
 package com.invbf.sistemagestionbonos.facade.impl;
 
+import com.invbf.sistemagestionbonos.dao.AreaDao;
+import com.invbf.sistemagestionbonos.dao.ClienteDao;
 import com.invbf.sistemagestionbonos.util.Notificador;
 import com.invbf.sistemagestionbonos.dao.LotebonoDao;
+import com.invbf.sistemagestionbonos.dao.SolicitudEntregaClientesDao;
 import com.invbf.sistemagestionbonos.dao.SolicitudEntregaDao;
 import com.invbf.sistemagestionbonos.dao.SolicitudentregalotesDao;
 import com.invbf.sistemagestionbonos.dao.SolicitudentregalotesmaestroDao;
+import com.invbf.sistemagestionbonos.entity.Areas;
+import com.invbf.sistemagestionbonos.entity.Clientessgb;
 import com.invbf.sistemagestionbonos.entity.Lotesbonos;
 import com.invbf.sistemagestionbonos.entity.Solicitudentrega;
+import com.invbf.sistemagestionbonos.entity.Solicitudentregaclientes;
 import com.invbf.sistemagestionbonos.entity.Solicitudentregalotes;
 import com.invbf.sistemagestionbonos.entity.Solicitudentregalotesmaestro;
 import com.invbf.sistemagestionbonos.exceptions.ExistenBonosFisicosException;
@@ -25,7 +31,7 @@ import java.util.List;
  *
  * @author ivan
  */
-public class MarketingFacadeImpl implements MarketingFacade{
+public class MarketingFacadeImpl implements MarketingFacade {
 
     @Override
     public Solicitudentregalotesmaestro getSolicitudentregalotesbono(Integer id) {
@@ -39,7 +45,7 @@ public class MarketingFacadeImpl implements MarketingFacade{
 
     @Override
     public boolean guardarSolicitudentregabonos(Solicitudentregalotesmaestro elemento) {
-        if (elemento.getId()== null) {
+        if (elemento.getId() == null) {
             List<Solicitudentregalotes> solicitudentregaloteses = elemento.getSolicitudentregalotesList();
             elemento.setSolicitudentregalotesList(null);
             SolicitudentregalotesmaestroDao.create(elemento);
@@ -64,7 +70,7 @@ public class MarketingFacadeImpl implements MarketingFacade{
 
     @Override
     public void deleteSolicitudentregalotesmaestro(Solicitudentregalotesmaestro elemento) {
-        for(Solicitudentregalotes sel: elemento.getSolicitudentregalotesList()){
+        for (Solicitudentregalotes sel : elemento.getSolicitudentregalotesList()) {
             SolicitudentregalotesDao.remove(sel);
         }
         SolicitudentregalotesmaestroDao.remove(elemento);
@@ -82,11 +88,11 @@ public class MarketingFacadeImpl implements MarketingFacade{
 
     @Override
     public void borrarLote(Lotesbonos elemento) throws ExistenBonosFisicosException {
-        if(elemento.getDesde().equals(elemento.getHasta())){
+        if (elemento.getDesde().equals(elemento.getHasta())) {
             for (Iterator<Solicitudentregalotes> iterator = elemento.getSolicitudentregalotesList().iterator(); iterator.hasNext();) {
                 Solicitudentregalotes next = iterator.next();
                 SolicitudentregalotesDao.remove(next);
-                
+
             }
             elemento.getSolicitudentregalotesList().clear();
             LotebonoDao.remove(elemento);
@@ -97,10 +103,10 @@ public class MarketingFacadeImpl implements MarketingFacade{
 
     @Override
     public void guardarLote(Lotesbonos elemento) throws LoteBonosExistenteException {
-        if(!LotebonoDao.existeLote(elemento)){
+        if (!LotebonoDao.existeLote(elemento)) {
             elemento.setSolicitudentregalotesList(new ArrayList<Solicitudentregalotes>());
             LotebonoDao.create(elemento);
-            
+
         } else {
             throw new LoteBonosExistenteException();
         }
@@ -108,6 +114,11 @@ public class MarketingFacadeImpl implements MarketingFacade{
 
     @Override
     public void deleteSolicitudentrega(Solicitudentrega elemento) {
+        if (elemento.getSolicitudentregaclientesList() != null) {
+                for (Solicitudentregaclientes col : elemento.getSolicitudentregaclientesList()) {
+                    SolicitudEntregaClientesDao.remove(col);
+                }
+            }
         SolicitudEntregaDao.remove(elemento);
     }
 
@@ -127,14 +138,38 @@ public class MarketingFacadeImpl implements MarketingFacade{
     }
 
     @Override
-    public void guardarSolicitudentrega(Solicitudentrega elemento) {
-        if(elemento.getId()!=null){
+    public Solicitudentrega guardarSolicitudentrega(Solicitudentrega elemento) {
+
+        System.out.println("entra aqui");
+        Areas a = AreaDao.findAll().get(0);
+        if (elemento.getId() != null) {
+            if (elemento.getSolicitudentregaclientesList() != null) {
+                for (Solicitudentregaclientes col : elemento.getSolicitudentregaclientesList()) {
+                    if(col.getAreaid()==null){
+                        col.setAreaid(a);
+                    }
+                    SolicitudEntregaClientesDao.edit(col);
+                }
+            }
             SolicitudEntregaDao.edit(elemento);
-            
+            return elemento;
         } else {
+            if (elemento.getSolicitudentregaclientesList() != null) {
+                for (Solicitudentregaclientes col : elemento.getSolicitudentregaclientesList()) {
+                    if(col.getAreaid()==null){
+                        col.setAreaid(a);
+                    }
+                    SolicitudEntregaClientesDao.edit(col);
+                }
+            }
             SolicitudEntregaDao.create(elemento);
+            return elemento;
         }
     }
 
-    
+    @Override
+    public void borrarSolicitudCliente(Solicitudentregaclientes sec) {
+                    SolicitudEntregaClientesDao.remove(sec);
+    }
+
 }

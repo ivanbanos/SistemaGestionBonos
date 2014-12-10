@@ -46,7 +46,7 @@ public class ListaSolicitudBonosBean {
     public void init() {
         sessionBean.checkUsuarioConectado();
         sessionBean.setActive("solicitudbonos");
-        if (!sessionBean.perfilViewMatch("SolicitudLotes")) {
+        if (!sessionBean.perfilViewMatch("GenerarSolicitudBono") && !sessionBean.perfilViewMatch("PreAprobarSolicitudBono") && !sessionBean.perfilViewMatch("AprobarSolicitudBono")) {
             try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("InicioSession.xhtml");
             } catch (IOException ex) {
@@ -102,7 +102,7 @@ public class ListaSolicitudBonosBean {
 
     public void goSolicitudAceptar(Integer i) {
         try {
-            sessionBean.getAttributes().put("idsolicitudentregalotes", i);
+            sessionBean.getAttributes().put("idSolicitudentrega", i);
             FacesContext.getCurrentInstance().getExternalContext().redirect("AprobarSolicitudBonos.xhtml");
         } catch (IOException ex) {
             Logger.getLogger(ListaSolicitudesEntregaLotesBonosBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -111,7 +111,7 @@ public class ListaSolicitudBonosBean {
 
     public void goSolicitudpreAceptar(Integer i) {
         try {
-            sessionBean.getAttributes().put("idsolicitudentregalotes", i);
+            sessionBean.getAttributes().put("idSolicitudentrega", i);
             FacesContext.getCurrentInstance().getExternalContext().redirect("PreAprobarSolicitudBonos.xhtml");
         } catch (IOException ex) {
             Logger.getLogger(ListaSolicitudesEntregaLotesBonosBean.class.getName()).log(Level.SEVERE, null, ex);

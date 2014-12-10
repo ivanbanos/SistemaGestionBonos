@@ -12,11 +12,13 @@ import com.invbf.sistemagestionbonos.dao.DenominacionDao;
 import com.invbf.sistemagestionbonos.dao.PropositosentregaDao;
 import com.invbf.sistemagestionbonos.dao.TipoBonoDao;
 import com.invbf.sistemagestionbonos.dao.UsuarioDao;
+import com.invbf.sistemagestionbonos.dao.UsuarioDetalleDao;
 import com.invbf.sistemagestionbonos.entity.Areas;
 import com.invbf.sistemagestionbonos.entity.Clientessgb;
 import com.invbf.sistemagestionbonos.entity.Denominaciones;
 import com.invbf.sistemagestionbonos.entity.Propositosentrega;
 import com.invbf.sistemagestionbonos.entity.Tiposbonos;
+import com.invbf.sistemagestionbonos.entity.Usuariosdetalles;
 import com.invbf.sistemagestionbonos.entitySGC.Casinos;
 import com.invbf.sistemagestionbonos.entitySGC.Usuarios;
 import com.invbf.sistemagestionbonos.facade.AdminFacade;
@@ -151,6 +153,11 @@ public class AdminFacadeImpl implements AdminFacade{
     @Override
     public List<Usuarios> findAllUsuarios() {
         return UsuarioDao.findAll();
+    }
+
+    @Override
+    public List<Usuariosdetalles> findAllUsuariosdetlles() {
+        return UsuarioDetalleDao.findAll();
     }
     
 }

@@ -66,7 +66,10 @@
                                 <h:commandLink action="#{sessionBean.go(&quot;inicio&quot;)}" class="navbar-text" value="#{label['inicio']}" rendered="#{sessionBean.isNotActive(&quot;inicio&quot;)}"/>
                             </li>
 
-                            <c:if test="#{sessionBean.perfilViewMatch(&quot;atributosbonos&quot;)}">
+                            <c:if test="#{sessionBean.perfilViewMatch(&quot;Propositos&quot;)
+                                      or sessionBean.perfilViewMatch(&quot;Areas&quot;)
+                                      or sessionBean.perfilViewMatch(&quot;denominaciones&quot;)
+                                      or sessionBean.perfilViewMatch(&quot;TipoBono&quot;)}">
                                 <li >
                                     <h:commandLink  action="#{sessionBean.go(&quot;atributosbonos&quot;)}" class="navbar-text-selected" value="#{label['atributosbono']}" rendered="#{sessionBean.isActive(&quot;atributosbonos&quot;)}"/>
                                     <h:commandLink  action="#{sessionBean.go(&quot;atributosbonos&quot;)}" class="navbar-text" value="#{label['atributosbono']}" rendered="#{sessionBean.isNotActive(&quot;atributosbonos&quot;)}"/>

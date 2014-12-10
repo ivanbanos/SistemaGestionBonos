@@ -27,20 +27,20 @@ public class CrudClientesSGBBean {
     @ManagedProperty("#{sessionBean}")
     private SessionBean sessionBean;
     private List<Casinos> casinos;
-    
+
     public void setSessionBean(SessionBean sessionBean) {
         this.sessionBean = sessionBean;
     }
-    
+
     public CrudClientesSGBBean() {
     }
-    
+
     @PostConstruct
     public void init() {
         System.out.println("que lo redirecciona?");
-                
+
         sessionBean.checkUsuarioConectado();
-        
+
         System.out.println("será esto?");
         sessionBean.setActive("solicitudbonos");
         System.out.println("esto?");
@@ -49,47 +49,55 @@ public class CrudClientesSGBBean {
         } else {
             lista = sessionBean.adminFacade.findClientessgbByCasino(sessionBean.getUsuario().getIdCasino());
         }
-        
+
         System.out.println("o esto?");
         elemento = new Clientessgb();
-        
+
         casinos = sessionBean.adminFacade.findAllCasinos();
         System.out.println("o esto?");
     }
-    
+
     public List<Clientessgb> getLista() {
         return lista;
     }
-    
+
     public void setLista(List<Clientessgb> lista) {
         this.lista = lista;
     }
-    
+
     public Clientessgb getElemento() {
         return elemento;
     }
-    
+
     public void setElemento(Clientessgb elemento) {
         this.elemento = elemento;
     }
-    
+
     public void delete() {
         if (elemento.getSolicitudentregaclientesList().isEmpty()) {
             sessionBean.adminFacade.deleteClientessgb(elemento);
-            lista = sessionBean.adminFacade.findAllClientessgb();
+            if (sessionBean.perfilViewMatch("verTodosClientes")) {
+                lista = sessionBean.adminFacade.findAllClientessgb();
+            } else {
+                lista = sessionBean.adminFacade.findClientessgbByCasino(sessionBean.getUsuario().getIdCasino());
+            }
             FacesUtil.addInfoMessage("Cliente eliminado", elemento.getNombres() + " " + elemento.getApellidos());
             elemento = new Clientessgb();
         } else {
             FacesUtil.addInfoMessage("Cleinte no puede ser borrado", elemento.getNombres() + " " + elemento.getApellidos());
         }
     }
-    
+
     public void guardar() {
         if (!sessionBean.perfilViewMatch("verTodosClientes")) {
             elemento.setIdCasino(sessionBean.getUsuario().getIdCasino().getIdCasino());
         }
         boolean opcion = sessionBean.adminFacade.guardarClientessgb(elemento);
-        lista = sessionBean.adminFacade.findAllClientessgb();
+        if (sessionBean.perfilViewMatch("verTodosClientes")) {
+            lista = sessionBean.adminFacade.findAllClientessgb();
+        } else {
+            lista = sessionBean.adminFacade.findClientessgbByCasino(sessionBean.getUsuario().getIdCasino());
+        }
         if (opcion) {
             FacesUtil.addInfoMessage("Cliente actualizado", elemento.getNombres() + " " + elemento.getApellidos());
         } else {
@@ -97,7 +105,7 @@ public class CrudClientesSGBBean {
         }
         elemento = new Clientessgb();
     }
-    
+
     public Casinos getCasinoById(Integer idCasino) {
         int casinoIndex = casinos.indexOf(new Casinos(idCasino));
         if (casinoIndex != -1) {
@@ -113,5 +121,5 @@ public class CrudClientesSGBBean {
     public void setCasinos(List<Casinos> casinos) {
         this.casinos = casinos;
     }
-    
+
 }

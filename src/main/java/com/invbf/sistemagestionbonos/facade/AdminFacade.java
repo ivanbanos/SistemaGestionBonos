@@ -10,6 +10,7 @@ import com.invbf.sistemagestionbonos.entity.Clientessgb;
 import com.invbf.sistemagestionbonos.entity.Denominaciones;
 import com.invbf.sistemagestionbonos.entity.Propositosentrega;
 import com.invbf.sistemagestionbonos.entity.Tiposbonos;
+import com.invbf.sistemagestionbonos.entity.Usuariosdetalles;
 import com.invbf.sistemagestionbonos.entitySGC.Casinos;
 import com.invbf.sistemagestionbonos.entitySGC.Usuarios;
 import java.util.List;
@@ -55,5 +56,7 @@ public interface AdminFacade {
     public List<Clientessgb> findClientessgbByCasino(Casinos idCasino);
 
     public List<Usuarios> findAllUsuarios();
+
+    public List<Usuariosdetalles> findAllUsuariosdetlles();
 
 }
