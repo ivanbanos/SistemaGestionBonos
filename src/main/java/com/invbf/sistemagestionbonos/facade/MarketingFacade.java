@@ -57,5 +57,7 @@ public interface MarketingFacade {
     public void borrarBononoIncluido(Bonosnoincluidos next);
 
     public void borrarSolicitudLote(Solicitudentregalotes next2);
+
+    public void convertBonosNoIncluidosToBonosNoFisicos(List<Solicitudentregalotes> solicitudentregalotesList);
     
 }

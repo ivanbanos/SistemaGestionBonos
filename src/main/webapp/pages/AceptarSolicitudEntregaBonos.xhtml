@@ -87,6 +87,17 @@
                                                         <td>#{solicitudes.lotesBonosid.denominacion.valor}</td>
                                                         <td>#{solicitudes.lotesBonosid.tipoBono.nombre}</td>
                                                     </tr>
+                                                    <tr>
+                                                        <td colspan="6">
+                                                            Bonos no incluidos
+                                                            <hr/>
+                                                            <c:forEach items="#{solicitudes.bonosnoincluidosList}" var="bonosno" >
+                                                                <h:outputText value="#{bonosno.consecutivo}"/>,&nbsp;
+                                                            </c:forEach>
+
+
+                                                        </td>
+                                                    </tr>
                                                 </c:forEach>
 
 
@@ -111,7 +122,7 @@
                         </div>
                         <div class="panel-footer text-right"> 
                             <p:commandButton id="btnconfirm" value="#{label['Confirmar']}" actionListener="#{aceptarSolicitudEntregaBonosBean.aceptar()}" 
-                                             update=" :#{p:component('messages')}" style="margin:0" rendered="#{aceptarSolicitudEntregaBonosBean.elemento.estado.equals(&quot;ACEPTADA&quot;)}"/>
+                                             update=" :#{p:component('messages')}" style="margin:0" rendered="#{aceptarSolicitudEntregaBonosBean.elemento.estado != &quot;ACEPTADA&quot;}"/>
                         </div>
                     </div>
                 </h:form>

@@ -6,6 +6,7 @@
 package com.invbf.sistemagestionbonos.facade.impl;
 
 import com.invbf.sistemagestionbonos.dao.AreaDao;
+import com.invbf.sistemagestionbonos.dao.BonosnofisicosDao;
 import com.invbf.sistemagestionbonos.dao.BonosnoincluidosDao;
 import com.invbf.sistemagestionbonos.util.Notificador;
 import com.invbf.sistemagestionbonos.dao.LotebonoDao;
@@ -14,6 +15,7 @@ import com.invbf.sistemagestionbonos.dao.SolicitudEntregaDao;
 import com.invbf.sistemagestionbonos.dao.SolicitudentregalotesDao;
 import com.invbf.sistemagestionbonos.dao.SolicitudentregalotesmaestroDao;
 import com.invbf.sistemagestionbonos.entity.Areas;
+import com.invbf.sistemagestionbonos.entity.Bonosnofisicos;
 import com.invbf.sistemagestionbonos.entity.Bonosnoincluidos;
 import com.invbf.sistemagestionbonos.entity.Lotesbonos;
 import com.invbf.sistemagestionbonos.entity.Solicitudentrega;
@@ -184,6 +186,21 @@ public class MarketingFacadeImpl implements MarketingFacade {
     @Override
     public void borrarSolicitudLote(Solicitudentregalotes next2) {
         SolicitudentregalotesDao.remove(next2);
+    }
+
+    @Override
+    public void convertBonosNoIncluidosToBonosNoFisicos(List<Solicitudentregalotes> solicitudentregalotesList) {
+        for (Solicitudentregalotes solicitudentregalotesList1 : solicitudentregalotesList) {
+            List<Bonosnoincluidos> bonosNoIncluidos = solicitudentregalotesList1.getBonosnoincluidosList();
+            for (Bonosnoincluidos next : bonosNoIncluidos) {
+                Bonosnofisicos bnf = new Bonosnofisicos();
+                bnf.setConsecutivo(next.getConsecutivo());
+                bnf.setLotesBonosid(solicitudentregalotesList1.getLotesBonosid());
+                BonosnofisicosDao.create(bnf);
+                solicitudentregalotesList1.getLotesBonosid().getBonosnofisicosList().add(bnf);
+            }
+            LotebonoDao.edit(solicitudentregalotesList1.getLotesBonosid());
+        }
     }
 
 }
