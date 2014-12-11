@@ -90,6 +90,25 @@
                                                             <td>#{solicitudes.lotesBonosid.denominacion.valor}</td>
                                                             <td>#{solicitudes.lotesBonosid.tipoBono.nombre}</td>
                                                         </tr>
+                                                        <c:if test="#{generadorSolicitudLotesBonos.elemento.id!=null}">
+                                                            <tr>
+                                                                <td colspan="6">
+                                                                    <p:outputPanel id="bonosnoincluidos#{status.count}" style="display:block">
+                                                                        Bonos no incluidos
+                                                                        <hr/>
+                                                                        <c:forEach items="#{solicitudes.bonosnoincluidosList}" var="bonosno" >
+                                                                            <h:inputText value="#{bonosno.consecutivo}"/>&nbsp;</c:forEach>
+                                                                        <p:commandButton id="addCliente#{status.count}" 
+                                                                                         update="@form" 
+                                                                                         action="#{generadorSolicitudLotesBonos.addBonoNoIncluido(status.index)}"
+                                                                                         icon="ui-icon-plusthick" title="#{label['lb_btn.agregar']}" />
+                                                                    </p:outputPanel>
+
+
+                                                                </td>
+                                                            </tr>
+                                                        </c:if>
+                                                        <script>changeHasta(#{status.count});</script>
                                                     </c:forEach>
 
 

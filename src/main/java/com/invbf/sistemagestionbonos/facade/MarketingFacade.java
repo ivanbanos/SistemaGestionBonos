@@ -5,10 +5,12 @@
  */
 package com.invbf.sistemagestionbonos.facade;
 
+import com.invbf.sistemagestionbonos.entity.Bonosnoincluidos;
 import com.invbf.sistemagestionbonos.entity.Clientessgb;
 import com.invbf.sistemagestionbonos.entity.Lotesbonos;
 import com.invbf.sistemagestionbonos.entity.Solicitudentrega;
 import com.invbf.sistemagestionbonos.entity.Solicitudentregaclientes;
+import com.invbf.sistemagestionbonos.entity.Solicitudentregalotes;
 import com.invbf.sistemagestionbonos.entity.Solicitudentregalotesmaestro;
 import com.invbf.sistemagestionbonos.exceptions.ExistenBonosFisicosException;
 import com.invbf.sistemagestionbonos.exceptions.LoteBonosExistenteException;
@@ -49,5 +51,11 @@ public interface MarketingFacade {
     public Solicitudentrega guardarSolicitudentrega(Solicitudentrega elemento);
 
     public void borrarSolicitudCliente(Solicitudentregaclientes sec);
+
+    public void guardarBononoincluido(Bonosnoincluidos bni);
+
+    public void borrarBononoIncluido(Bonosnoincluidos next);
+
+    public void borrarSolicitudLote(Solicitudentregalotes next2);
     
 }

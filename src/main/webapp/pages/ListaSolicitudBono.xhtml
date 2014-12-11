@@ -73,11 +73,11 @@
                                             </p:commandButton> 
                                             
                                             <p:commandButton id="aprobar" action="#{listaSolicitudBonosBean.goSolicitudAceptar(element.id)}" icon="ui-icon-gear" 
-                                                             title="#{label['lb_btn.aceptar']}"
+                                                             title="#{label['lb_btn.aprobar']}"
                                                              rendered="#{sessionBean.perfilViewMatch(&quot;AprobarSolicitudBono&quot;) and !element.estado.equals(&quot;APROBADA&quot;)}"/> 
-                                            <p:commandButton id="preaprobar" action="#{listaSolicitudBonosBean.goSolicitudAceptar(element.id)}" icon="ui-icon-gear" 
-                                                             title="#{label['lb_btn.aceptar']}"
-                                                             rendered="#{sessionBean.perfilViewMatch(&quot;PreAprobarSolicitudBono&quot;) and !element.estado.equals(&quot;APROBADA&quot;) and !element.estado.equals(&quot;PREAPROBADA&quot;)}"/> 
+                                            <p:commandButton id="preaprobar" action="#{listaSolicitudBonosBean.goSolicitudpreAceptar(element.id)}" icon="ui-icon-gear" 
+                                                             title="#{label['lb_btn.preaprobar']}"
+                                                             rendered="#{sessionBean.perfilViewMatch(&quot;PreAprobarSolicitudBono&quot;) and !element.estado.equals(&quot;APROBADA&quot;)}"/> 
                                         </p:column>
 
                                         <f:facet name="footer"> 

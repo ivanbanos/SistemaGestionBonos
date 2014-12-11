@@ -6,7 +6,7 @@
 package com.invbf.sistemagestionbonos.facade.impl;
 
 import com.invbf.sistemagestionbonos.dao.AreaDao;
-import com.invbf.sistemagestionbonos.dao.ClienteDao;
+import com.invbf.sistemagestionbonos.dao.BonosnoincluidosDao;
 import com.invbf.sistemagestionbonos.util.Notificador;
 import com.invbf.sistemagestionbonos.dao.LotebonoDao;
 import com.invbf.sistemagestionbonos.dao.SolicitudEntregaClientesDao;
@@ -14,7 +14,7 @@ import com.invbf.sistemagestionbonos.dao.SolicitudEntregaDao;
 import com.invbf.sistemagestionbonos.dao.SolicitudentregalotesDao;
 import com.invbf.sistemagestionbonos.dao.SolicitudentregalotesmaestroDao;
 import com.invbf.sistemagestionbonos.entity.Areas;
-import com.invbf.sistemagestionbonos.entity.Clientessgb;
+import com.invbf.sistemagestionbonos.entity.Bonosnoincluidos;
 import com.invbf.sistemagestionbonos.entity.Lotesbonos;
 import com.invbf.sistemagestionbonos.entity.Solicitudentrega;
 import com.invbf.sistemagestionbonos.entity.Solicitudentregaclientes;
@@ -51,7 +51,6 @@ public class MarketingFacadeImpl implements MarketingFacade {
             SolicitudentregalotesmaestroDao.create(elemento);
             for (Solicitudentregalotes solicitudentregalotese : solicitudentregaloteses) {
                 solicitudentregalotese.setSolicitudEntregaLotesMaestro(elemento);
-                SolicitudentregalotesDao.create(solicitudentregalotese);
             }
             elemento.setSolicitudentregalotesList(solicitudentregaloteses);
             SolicitudentregalotesmaestroDao.edit(elemento);
@@ -170,6 +169,21 @@ public class MarketingFacadeImpl implements MarketingFacade {
     @Override
     public void borrarSolicitudCliente(Solicitudentregaclientes sec) {
                     SolicitudEntregaClientesDao.remove(sec);
+    }
+
+    @Override
+    public void guardarBononoincluido(Bonosnoincluidos bni) {
+        BonosnoincluidosDao.edit(bni);
+    }
+
+    @Override
+    public void borrarBononoIncluido(Bonosnoincluidos next) {
+        BonosnoincluidosDao.remove(next);
+    }
+
+    @Override
+    public void borrarSolicitudLote(Solicitudentregalotes next2) {
+        SolicitudentregalotesDao.remove(next2);
     }
 
 }

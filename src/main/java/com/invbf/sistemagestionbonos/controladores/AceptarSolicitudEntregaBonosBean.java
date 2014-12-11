@@ -30,7 +30,7 @@ public class AceptarSolicitudEntregaBonosBean {
     private Solicitudentregalotesmaestro elemento;
     private List<Casinos> casinos;
     private final HashMap<String, Long> mapLetrasValores;
-    private HashMap<Long, String> mapValoresLetras;
+    private final HashMap<Long, String> mapValoresLetras;
 
     @ManagedProperty("#{sessionBean}")
     private SessionBean sessionBean;
@@ -101,7 +101,7 @@ public class AceptarSolicitudEntregaBonosBean {
     public void init() {
         sessionBean.checkUsuarioConectado();
         sessionBean.setActive("lotesdebonos");
-        if (!sessionBean.perfilFormMatch("SolicitudLotes", "crear")) {
+        if (!sessionBean.perfilViewMatch("AceptarSolicitudLotesBonos")) {
             try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("InicioSession.xhtml");
             } catch (IOException ex) {

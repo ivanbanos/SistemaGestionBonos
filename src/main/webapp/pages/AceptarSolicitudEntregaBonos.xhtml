@@ -34,7 +34,7 @@
                                         <div class="form-group">
                                             <label class="col-md-2 control-label" >#{label['fechacreacion']}</label>
                                             <div class="col-md-4">
-                                                <h:outputText value="#{generadorSolicitudLotesBonos.elemento.fecha}" >
+                                                <h:outputText value="#{aceptarSolicitudEntregaBonosBean.elemento.fecha}" >
                                                     <f:convertDateTime pattern="dd/MMMMM/yyyy hh:mm:ss" locale="es" timeZone="GTM-5"  />
                                                 </h:outputText>
 
@@ -48,7 +48,7 @@
                                         <div class="form-group">
                                             <label class="col-md-2 control-label" >#{label['usuario']}</label>
                                             <div class="col-md-4">
-                                                #{aceptarSolicitudEntregaBonosBean.getNombreDeUsuario(generadorSolicitudLotesBonos.elemento.remitente)}
+                                                #{aceptarSolicitudEntregaBonosBean.getNombreDeUsuario(aceptarSolicitudEntregaBonosBean.elemento.remitente)}
                                             </div>
                                         </div>
                                     </div>
@@ -111,7 +111,7 @@
                         </div>
                         <div class="panel-footer text-right"> 
                             <p:commandButton id="btnconfirm" value="#{label['Confirmar']}" actionListener="#{aceptarSolicitudEntregaBonosBean.aceptar()}" 
-                                             update=" :#{p:component('messages')}" style="margin:0" rendered="#{aceptarSolicitudEntregaBonosBean.elemento.estado(&quot;ACEPTADA&quot;)}"/>
+                                             update=" :#{p:component('messages')}" style="margin:0" rendered="#{aceptarSolicitudEntregaBonosBean.elemento.estado.equals(&quot;ACEPTADA&quot;)}"/>
                         </div>
                     </div>
                 </h:form>

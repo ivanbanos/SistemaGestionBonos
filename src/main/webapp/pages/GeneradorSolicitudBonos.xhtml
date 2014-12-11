@@ -135,50 +135,54 @@
                                 <c:if test="#{generadorSolicitudBonos.elemento.id!=null}">
 
                                     <div class="row">
-                                        <legend>Clientes</legend>
                                         <div class="control-group">
                                             <div class="form-group">
                                                 <div class="col-md-12">
-                                                    <table class="table table-striped">
-                                                        <tr>
-                                                            <th>#{'item'}</th>
-                                                            <th>#{'nombre'}</th>
-                                                            <th>#{'valor'}</th>
-                                                            <th>#{'area'}</th>
-                                                            <th></th>
-                                                        </tr>
-                                                        <c:forEach items="#{generadorSolicitudBonos.solicitudentregaclienteses}" var="cli" varStatus="status">
-                                                            <tr>
+                                                    <h:dataTable class="table table-striped" value="#{generadorSolicitudBonos.solicitudentregaclienteses}" var="cli"
+                                                                 >
+                                                        <f:facet name="header">
+                                                            <h:outputText value="Clientes" />
+                                                        </f:facet>
+                                                        <h:column >
+                                                            <f:facet name="header">
+                                                                <h:outputText value="#{'item'}" />
+                                                            </f:facet>
+                                                            <label>#{cli.clientessgb.id}</label>
+                                                        </h:column>
+                                                        <h:column >
+                                                            <f:facet name="header">
+                                                                <h:outputText value="#{'nombre'}" />
+                                                            </f:facet>
+                                                            <label>#{cli.clientessgb.nombres} #{cli.clientessgb.apellidos}</label>
+                                                        </h:column>
+                                                        <h:column >
+                                                            <f:facet name="header">
+                                                                <h:outputText value="#{'valor'}" />
+                                                            </f:facet>
+                                                            <p:spinner min="0" stepFactor="5000" id="valor#{cli.clientessgb.id}" value="#{cli.valorTotal}" />
+                                                        </h:column>
+                                                        <h:column >
+                                                            <f:facet name="header">
+                                                                <h:outputText value="#{'area'}" />
+                                                            </f:facet>
+                                                            <h:selectOneMenu id="area#{cli.clientessgb.id}" value="#{cli.areaid.id}"  required="true">
+                                                                <f:selectItem itemLabel="Seleciona Uno" itemValue="" />
+                                                                <f:selectItems value="#{generadorSolicitudBonos.areas}" var="area" itemLabel="#{area.nombre}" itemValue="#{area.id}"/>  
+                                                            </h:selectOneMenu>
+                                                        </h:column>
+                                                        <h:column >
+                                                            <p:commandButton id="quitar#{cli.clientessgb.id}" ajax="false" action="#{generadorSolicitudBonos.quitarCliente(cli.clientessgb.id)}" 
+                                                                             icon="ui-icon-closethick" title="#{label['lb_btn.borrar']}" />
+                                                        </h:column>
+                                                        <f:facet name="footer">
+                                                            <p:commandButton id="addCliente" oncomplete="PF('addClienteDialog').show();" 
+                                                                             update=":#{p:component('addClienteDialog')}"
+                                                                             icon="ui-icon-plusthick" title="#{label['lb_btn.agregar']}" />
+                                                        </f:facet>
+                                                    </h:dataTable>
 
-                                                                <td><label>#{status.count}</label></td>
 
-                                                                <td><label>#{cli.clientessgb.nombres} #{cli.clientessgb.apellidos}</label></td>
-                                                                <td>
-                                                                    <p:spinner min="0" stepFactor="5000" id="valor#{status.count}"
-                                                                               value="#{cli.valorTotal}" />
-                                                                </td>
 
-                                                                <td>
-                                                                    <p:selectOneMenu id="area#{status.count}" value="#{cli.areaid.id}"  required="true">
-                                                                        <f:selectItem itemLabel="Seleciona Uno" itemValue="" />
-                                                                        <f:selectItems value="#{generadorSolicitudBonos.areas}" var="area" itemLabel="#{area.nombre}" itemValue="#{area.id}"/>  
-                                                                    </p:selectOneMenu>
-                                                                </td>
-                                                                <td>
-                                                                    <p:commandButton id="quitar#{status.count}" ajax="false" action="#{generadorSolicitudBonos.quitarCliente(cli.clientessgb.id)}" 
-                                                                                     icon="ui-icon-closethick" title="#{label['lb_btn.borrar']}" />
-                                                                </td>
-                                                            </tr>
-                                                        </c:forEach>
-                                                        <tr>
-                                                            <td colspan="5">
-                                                                <p:commandButton id="addCliente" oncomplete="PF('addClienteDialog').show();" 
-                                                                                  update=":#{p:component('addClienteDialog')}"
-                                                                                 icon="ui-icon-plusthick" title="#{label['lb_btn.agregar']}" />
-                                                            </td>
-                                                        </tr>
-
-                                                    </table>
                                                 </div>
                                             </div>
 
