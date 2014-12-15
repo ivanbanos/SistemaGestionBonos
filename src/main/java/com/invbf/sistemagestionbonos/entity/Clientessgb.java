@@ -60,6 +60,8 @@ public class Clientessgb implements Serializable {
     private Integer idCasino;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "clientessgb")
     private List<Solicitudentregaclientes> solicitudentregaclientesList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clientessgb")
+    private List<ControlsalidabonosHasLotesbonos> controlsalidabonosHasLotesbonosList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
     private List<Bono> bonoList;
 
@@ -123,6 +125,15 @@ public class Clientessgb implements Serializable {
 
     public void setSolicitudentregaclientesList(List<Solicitudentregaclientes> solicitudentregaclientesList) {
         this.solicitudentregaclientesList = solicitudentregaclientesList;
+    }
+
+    @XmlTransient
+    public List<ControlsalidabonosHasLotesbonos> getControlsalidabonosHasLotesbonosList() {
+        return controlsalidabonosHasLotesbonosList;
+    }
+
+    public void setControlsalidabonosHasLotesbonosList(List<ControlsalidabonosHasLotesbonos> controlsalidabonosHasLotesbonosList) {
+        this.controlsalidabonosHasLotesbonosList = controlsalidabonosHasLotesbonosList;
     }
 
     @XmlTransient

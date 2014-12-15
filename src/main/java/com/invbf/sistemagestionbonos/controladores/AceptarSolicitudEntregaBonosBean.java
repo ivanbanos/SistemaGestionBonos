@@ -135,12 +135,11 @@ public class AceptarSolicitudEntregaBonosBean {
         try {
             for (Solicitudentregalotes sol : elemento.getSolicitudentregalotesList()) {
                 sol.getLotesBonosid().setHasta(getConsecutivo(sol.getLotesBonosid().getHasta(), sol.getCantidad()));
-                sessionBean.marketingFacade.editLoteBono(sol.getLotesBonosid());
+                sessionBean.marketingFacade.editLoteBono(sol.getLotesBonosid(), sol.getBonosnoincluidosList());
             }
             elemento.setEstado("ACEPTADA");
             sessionBean.marketingFacade.guardarSolicitudentregabonos(elemento);
             sessionBean.getAttributes().remove("idsolicitudentregalotes");
-            sessionBean.marketingFacade.convertBonosNoIncluidosToBonosNoFisicos(elemento.getSolicitudentregalotesList());
             FacesContext.getCurrentInstance().getExternalContext().redirect("ListaSolicitudLotesBonosView.xhtml");
         } catch (IOException ex) {
             Logger.getLogger(AceptarSolicitudEntregaBonosBean.class.getName()).log(Level.SEVERE, null, ex);

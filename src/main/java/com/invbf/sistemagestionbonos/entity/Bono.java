@@ -80,6 +80,9 @@ public class Bono implements Serializable {
     @JoinColumn(name = "Cliente", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Clientessgb cliente;
+    @JoinColumn(name = "ControlSalidaBonos_id", referencedColumnName = "id")
+    @ManyToOne
+    private Controlsalidabonos controlSalidaBonosid;
 
     public Bono() {
     }
@@ -181,6 +184,14 @@ public class Bono implements Serializable {
 
     public void setCliente(Clientessgb cliente) {
         this.cliente = cliente;
+    }
+
+    public Controlsalidabonos getControlSalidaBonosid() {
+        return controlSalidaBonosid;
+    }
+
+    public void setControlSalidaBonosid(Controlsalidabonos controlSalidaBonosid) {
+        this.controlSalidaBonosid = controlSalidaBonosid;
     }
 
     @Override

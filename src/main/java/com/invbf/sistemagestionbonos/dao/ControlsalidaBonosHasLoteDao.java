@@ -5,7 +5,8 @@
  */
 package com.invbf.sistemagestionbonos.dao;
 
-import com.invbf.sistemagestionbonos.entity.Bonosnofisicos;
+import com.invbf.sistemagestionbonos.entity.ControlsalidabonosHasLotesbonos;
+import com.invbf.sistemagestionbonos.entity.ControlsalidabonosHasLotesbonosPK;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -17,12 +18,11 @@ import javax.persistence.Persistence;
  *
  * @author ivan
  */
-public class BonosnofisicosDao {
-
-    public BonosnofisicosDao() {
+public class ControlsalidaBonosHasLoteDao {
+     public ControlsalidaBonosHasLoteDao() {
     }
 
-    public static void create(Bonosnofisicos cargo) {
+    public static void create(ControlsalidabonosHasLotesbonos cargo) {
         EntityManagerFactory emf
                 = Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
@@ -42,7 +42,7 @@ public class BonosnofisicosDao {
         emf.close();
     }
 
-    public static void edit(Bonosnofisicos cargo) {
+    public static void edit(ControlsalidabonosHasLotesbonos cargo) {
 
         EntityManagerFactory emf
                 = Persistence.createEntityManagerFactory("gestionBonosPU");
@@ -61,7 +61,7 @@ public class BonosnofisicosDao {
         emf.close();
     }
 
-    public static void remove(Bonosnofisicos cargo) {
+    public static void remove(ControlsalidabonosHasLotesbonos cargo) {
         EntityManagerFactory emf
                 = Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
@@ -79,16 +79,16 @@ public class BonosnofisicosDao {
         emf.close();
     }
 
-    public static Bonosnofisicos find(Integer id) {
+    public static ControlsalidabonosHasLotesbonos find(ControlsalidabonosHasLotesbonosPK id) {
         EntityManagerFactory emf
                 = Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
-        Bonosnofisicos cargo = null;
+        ControlsalidabonosHasLotesbonos cargo = null;
 
         tx.begin();
         try {
-            cargo = em.find(Bonosnofisicos.class, id);
+            cargo = em.find(ControlsalidabonosHasLotesbonos.class, id);
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
@@ -99,17 +99,17 @@ public class BonosnofisicosDao {
         return cargo;
     }
 
-    public static List<Bonosnofisicos> findAll() {
+    public static List<ControlsalidabonosHasLotesbonos> findAll() {
         EntityManagerFactory emf
                 = Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
-        List<Bonosnofisicos> lista = new ArrayList<Bonosnofisicos>();
+        List<ControlsalidabonosHasLotesbonos> lista = new ArrayList<ControlsalidabonosHasLotesbonos>();
 
         tx.begin();
         try {
             javax.persistence.criteria.CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Bonosnofisicos.class));
+            cq.select(cq.from(ControlsalidabonosHasLotesbonos.class));
             lista = em.createQuery(cq).getResultList();
             tx.commit();
         } catch (Exception e) {
@@ -122,17 +122,17 @@ public class BonosnofisicosDao {
         return lista;
     }
 
-    public static List<Bonosnofisicos> findRange(int[] range) {
+    public static List<ControlsalidabonosHasLotesbonos> findRange(int[] range) {
         EntityManagerFactory emf
                 = Persistence.createEntityManagerFactory("gestionBonosPU");
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
-        List<Bonosnofisicos> lista = new ArrayList<Bonosnofisicos>();
+        List<ControlsalidabonosHasLotesbonos> lista = new ArrayList<ControlsalidabonosHasLotesbonos>();
 
         tx.begin();
         try {
             javax.persistence.criteria.CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Bonosnofisicos.class));
+            cq.select(cq.from(ControlsalidabonosHasLotesbonos.class));
             javax.persistence.Query q = em.createQuery(cq);
             q.setMaxResults(range[1] - range[0]);
             q.setFirstResult(range[0]);
@@ -157,7 +157,7 @@ public class BonosnofisicosDao {
         tx.begin();
         try {
             javax.persistence.criteria.CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            javax.persistence.criteria.Root<Bonosnofisicos> rt = cq.from(Bonosnofisicos.class);
+            javax.persistence.criteria.Root<ControlsalidabonosHasLotesbonos> rt = cq.from(ControlsalidabonosHasLotesbonos.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             javax.persistence.Query q = em.createQuery(cq);
             count = ((Long) q.getSingleResult()).intValue();

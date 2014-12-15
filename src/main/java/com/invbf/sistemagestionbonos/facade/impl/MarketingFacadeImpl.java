@@ -8,6 +8,7 @@ package com.invbf.sistemagestionbonos.facade.impl;
 import com.invbf.sistemagestionbonos.dao.AreaDao;
 import com.invbf.sistemagestionbonos.dao.BonosnofisicosDao;
 import com.invbf.sistemagestionbonos.dao.BonosnoincluidosDao;
+import com.invbf.sistemagestionbonos.dao.ControlsalidabonosDao;
 import com.invbf.sistemagestionbonos.util.Notificador;
 import com.invbf.sistemagestionbonos.dao.LotebonoDao;
 import com.invbf.sistemagestionbonos.dao.SolicitudEntregaClientesDao;
@@ -17,6 +18,7 @@ import com.invbf.sistemagestionbonos.dao.SolicitudentregalotesmaestroDao;
 import com.invbf.sistemagestionbonos.entity.Areas;
 import com.invbf.sistemagestionbonos.entity.Bonosnofisicos;
 import com.invbf.sistemagestionbonos.entity.Bonosnoincluidos;
+import com.invbf.sistemagestionbonos.entity.Controlsalidabonos;
 import com.invbf.sistemagestionbonos.entity.Lotesbonos;
 import com.invbf.sistemagestionbonos.entity.Solicitudentrega;
 import com.invbf.sistemagestionbonos.entity.Solicitudentregaclientes;
@@ -25,9 +27,16 @@ import com.invbf.sistemagestionbonos.entity.Solicitudentregalotesmaestro;
 import com.invbf.sistemagestionbonos.exceptions.ExistenBonosFisicosException;
 import com.invbf.sistemagestionbonos.exceptions.LoteBonosExistenteException;
 import com.invbf.sistemagestionbonos.facade.MarketingFacade;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -46,25 +55,6 @@ public class MarketingFacadeImpl implements MarketingFacade {
     }
 
     @Override
-    public boolean guardarSolicitudentregabonos(Solicitudentregalotesmaestro elemento) {
-        if (elemento.getId() == null) {
-            List<Solicitudentregalotes> solicitudentregaloteses = elemento.getSolicitudentregalotesList();
-            elemento.setSolicitudentregalotesList(null);
-            SolicitudentregalotesmaestroDao.create(elemento);
-            for (Solicitudentregalotes solicitudentregalotese : solicitudentregaloteses) {
-                solicitudentregalotese.setSolicitudEntregaLotesMaestro(elemento);
-            }
-            elemento.setSolicitudentregalotesList(solicitudentregaloteses);
-            SolicitudentregalotesmaestroDao.edit(elemento);
-            Notificador.notificar(Notificador.SOLICITUD_ENTREGA_LOTES_GENERADA);
-            return false;
-        } else {
-            SolicitudentregalotesmaestroDao.edit(elemento);
-            return true;
-        }
-    }
-
-    @Override
     public List<Solicitudentregalotesmaestro> getAllSolicitudentregalotesmaestro() {
         return SolicitudentregalotesmaestroDao.findAll();
     }
@@ -75,11 +65,6 @@ public class MarketingFacadeImpl implements MarketingFacade {
             SolicitudentregalotesDao.remove(sel);
         }
         SolicitudentregalotesmaestroDao.remove(elemento);
-    }
-
-    @Override
-    public void editLoteBono(Lotesbonos lotesBonosid) {
-        LotebonoDao.edit(lotesBonosid);
     }
 
     @Override
@@ -116,10 +101,10 @@ public class MarketingFacadeImpl implements MarketingFacade {
     @Override
     public void deleteSolicitudentrega(Solicitudentrega elemento) {
         if (elemento.getSolicitudentregaclientesList() != null) {
-                for (Solicitudentregaclientes col : elemento.getSolicitudentregaclientesList()) {
-                    SolicitudEntregaClientesDao.remove(col);
-                }
+            for (Solicitudentregaclientes col : elemento.getSolicitudentregaclientesList()) {
+                SolicitudEntregaClientesDao.remove(col);
             }
+        }
         SolicitudEntregaDao.remove(elemento);
     }
 
@@ -146,7 +131,7 @@ public class MarketingFacadeImpl implements MarketingFacade {
         if (elemento.getId() != null) {
             if (elemento.getSolicitudentregaclientesList() != null) {
                 for (Solicitudentregaclientes col : elemento.getSolicitudentregaclientesList()) {
-                    if(col.getAreaid()==null){
+                    if (col.getAreaid() == null) {
                         col.setAreaid(a);
                     }
                     SolicitudEntregaClientesDao.edit(col);
@@ -157,7 +142,7 @@ public class MarketingFacadeImpl implements MarketingFacade {
         } else {
             if (elemento.getSolicitudentregaclientesList() != null) {
                 for (Solicitudentregaclientes col : elemento.getSolicitudentregaclientesList()) {
-                    if(col.getAreaid()==null){
+                    if (col.getAreaid() == null) {
                         col.setAreaid(a);
                     }
                     SolicitudEntregaClientesDao.edit(col);
@@ -170,7 +155,7 @@ public class MarketingFacadeImpl implements MarketingFacade {
 
     @Override
     public void borrarSolicitudCliente(Solicitudentregaclientes sec) {
-                    SolicitudEntregaClientesDao.remove(sec);
+        SolicitudEntregaClientesDao.remove(sec);
     }
 
     @Override
@@ -203,4 +188,64 @@ public class MarketingFacadeImpl implements MarketingFacade {
         }
     }
 
+    @Override
+    public void editLoteBono(Lotesbonos lotesBonosid, List<Bonosnoincluidos> bonosnoincluidos) {
+        if (lotesBonosid.getBonosnofisicosList() == null) {
+            lotesBonosid.setBonosnofisicosList(new ArrayList<Bonosnofisicos>());
+        }
+        for (Bonosnoincluidos next : bonosnoincluidos) {
+            if (next.getConsecutivo() != null || !next.getConsecutivo().equals("")) {
+                Bonosnofisicos bnf = new Bonosnofisicos();
+                bnf.setConsecutivo(next.getConsecutivo());
+                bnf.setLotesBonosid(lotesBonosid);
+                BonosnofisicosDao.create(bnf);
+                lotesBonosid.getBonosnofisicosList().add(bnf);
+            }
+        }
+        LotebonoDao.edit(lotesBonosid);
+    }
+
+    @Override
+    public boolean guardarSolicitudentregabonos(Solicitudentregalotesmaestro elemento) {
+        if (elemento.getId() == null) {
+            List<Solicitudentregalotes> solicitudentregaloteses = elemento.getSolicitudentregalotesList();
+            elemento.setSolicitudentregalotesList(null);
+            SolicitudentregalotesmaestroDao.create(elemento);
+            for (Solicitudentregalotes solicitudentregalotese : solicitudentregaloteses) {
+                solicitudentregalotese.setSolicitudEntregaLotesMaestro(elemento);
+            }
+            elemento.setSolicitudentregalotesList(solicitudentregaloteses);
+            SolicitudentregalotesmaestroDao.edit(elemento);
+            Notificador.notificar(Notificador.SOLICITUD_ENTREGA_LOTES_GENERADA);
+            return false;
+        } else {
+            SolicitudentregalotesmaestroDao.edit(elemento);
+            return true;
+        }
+    }
+
+    @Override
+    public void crearSolicitudSalidaBonos(Solicitudentrega s) {
+        Controlsalidabonos csb = new Controlsalidabonos();
+        csb.setSolicitudEntregaid(s);
+        csb.setEstado("CREADA");
+        try {
+            DateFormat df = new SimpleDateFormat("dd/MMMM/yyyy HH:mm:ss");
+            DateFormat df2 = new SimpleDateFormat("dd/MMMM/yyyy HH:mm:ss");
+            TimeZone timeZone = TimeZone.getTimeZone("GMT-5");
+            df.setTimeZone(timeZone);
+            Calendar nowDate = Calendar.getInstance();
+            nowDate.setTime(df2.parse(df.format(nowDate.getTime())));
+            csb.setFecha(nowDate.getTime());
+        } catch (ParseException ex) {
+            Logger.getLogger(MarketingFacadeImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ControlsalidabonosDao.create(csb);
+
+    }
+
+    @Override
+    public List<Controlsalidabonos> getAllControlsalidabonos() {
+        return ControlsalidabonosDao.findAll();
+    }
 }

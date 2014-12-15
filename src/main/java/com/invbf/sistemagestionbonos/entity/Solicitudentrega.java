@@ -57,8 +57,6 @@ public class Solicitudentrega implements Serializable {
     private Date fecha;
     @Column(name = "solicitante")
     private Integer solicitante;
-    @Column(name = "idCasino")
-    private Integer idCasino;
     @Column(name = "aprobador")
     private Integer aprobador;
     @Size(max = 400)
@@ -67,14 +65,18 @@ public class Solicitudentrega implements Serializable {
     @Size(max = 45)
     @Column(name = "estado")
     private String estado;
+    @Column(name = "idCasino")
+    private Integer idCasino;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "solicitudentrega")
     private List<Solicitudentregaclientes> solicitudentregaclientesList;
-    @JoinColumn(name = "PropositoEntrega", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Propositosentrega propositoEntrega;
     @JoinColumn(name = "TipoBono", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Tiposbonos tipoBono;
+    @JoinColumn(name = "PropositoEntrega", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private Propositosentrega propositoEntrega;
+    @OneToMany(mappedBy = "solicitudEntregaid")
+    private List<Controlsalidabonos> controlsalidabonosList;
 
     public Solicitudentrega() {
     }
@@ -112,14 +114,6 @@ public class Solicitudentrega implements Serializable {
         this.solicitante = solicitante;
     }
 
-    public Integer getIdCasino() {
-        return idCasino;
-    }
-
-    public void setIdCasino(Integer idCasino) {
-        this.idCasino = idCasino;
-    }
-
     public Integer getAprobador() {
         return aprobador;
     }
@@ -144,6 +138,14 @@ public class Solicitudentrega implements Serializable {
         this.estado = estado;
     }
 
+    public Integer getIdCasino() {
+        return idCasino;
+    }
+
+    public void setIdCasino(Integer idCasino) {
+        this.idCasino = idCasino;
+    }
+
     @XmlTransient
     public List<Solicitudentregaclientes> getSolicitudentregaclientesList() {
         return solicitudentregaclientesList;
@@ -151,6 +153,14 @@ public class Solicitudentrega implements Serializable {
 
     public void setSolicitudentregaclientesList(List<Solicitudentregaclientes> solicitudentregaclientesList) {
         this.solicitudentregaclientesList = solicitudentregaclientesList;
+    }
+
+    public Tiposbonos getTipoBono() {
+        return tipoBono;
+    }
+
+    public void setTipoBono(Tiposbonos tipoBono) {
+        this.tipoBono = tipoBono;
     }
 
     public Propositosentrega getPropositoEntrega() {
@@ -161,12 +171,13 @@ public class Solicitudentrega implements Serializable {
         this.propositoEntrega = propositoEntrega;
     }
 
-    public Tiposbonos getTipoBono() {
-        return tipoBono;
+    @XmlTransient
+    public List<Controlsalidabonos> getControlsalidabonosList() {
+        return controlsalidabonosList;
     }
 
-    public void setTipoBono(Tiposbonos tipoBono) {
-        this.tipoBono = tipoBono;
+    public void setControlsalidabonosList(List<Controlsalidabonos> controlsalidabonosList) {
+        this.controlsalidabonosList = controlsalidabonosList;
     }
 
     @Override

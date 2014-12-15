@@ -14,8 +14,6 @@ import com.invbf.sistemagestionbonos.exceptions.LoteBonosExistenteException;
 import com.invbf.sistemagestionbonos.util.FacesUtil;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -142,5 +140,5 @@ public class CrudLoteBonoBean {
     public void setTiposbonos(List<Tiposbonos> tiposbonos) {
         this.tiposbonos = tiposbonos;
     }
-
+    
 }

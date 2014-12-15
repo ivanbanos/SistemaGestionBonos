@@ -68,6 +68,8 @@ public class Lotesbonos implements Serializable {
     @JoinColumn(name = "Denominacion", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Denominaciones denominacion;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "lotesbonos")
+    private List<ControlsalidabonosHasLotesbonos> controlsalidabonosHasLotesbonosList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "lotesBonosid")
     private List<Bonosnofisicos> bonosnofisicosList;
 
@@ -140,6 +142,15 @@ public class Lotesbonos implements Serializable {
 
     public void setDenominacion(Denominaciones denominacion) {
         this.denominacion = denominacion;
+    }
+
+    @XmlTransient
+    public List<ControlsalidabonosHasLotesbonos> getControlsalidabonosHasLotesbonosList() {
+        return controlsalidabonosHasLotesbonosList;
+    }
+
+    public void setControlsalidabonosHasLotesbonosList(List<ControlsalidabonosHasLotesbonos> controlsalidabonosHasLotesbonosList) {
+        this.controlsalidabonosHasLotesbonosList = controlsalidabonosHasLotesbonosList;
     }
 
     @XmlTransient

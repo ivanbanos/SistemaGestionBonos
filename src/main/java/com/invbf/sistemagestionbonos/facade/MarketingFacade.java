@@ -7,6 +7,7 @@ package com.invbf.sistemagestionbonos.facade;
 
 import com.invbf.sistemagestionbonos.entity.Bonosnoincluidos;
 import com.invbf.sistemagestionbonos.entity.Clientessgb;
+import com.invbf.sistemagestionbonos.entity.Controlsalidabonos;
 import com.invbf.sistemagestionbonos.entity.Lotesbonos;
 import com.invbf.sistemagestionbonos.entity.Solicitudentrega;
 import com.invbf.sistemagestionbonos.entity.Solicitudentregaclientes;
@@ -32,7 +33,7 @@ public interface MarketingFacade {
 
     public void deleteSolicitudentregalotesmaestro(Solicitudentregalotesmaestro elemento);
 
-    public void editLoteBono(Lotesbonos lotesBonosid);
+    public void editLoteBono(Lotesbonos lotesBonosid, List<Bonosnoincluidos> solicitudentregalotesList);
 
     public List<Solicitudentregalotesmaestro> getSolicitudentregalotesmaestroNoAceptadas();
 
@@ -59,5 +60,9 @@ public interface MarketingFacade {
     public void borrarSolicitudLote(Solicitudentregalotes next2);
 
     public void convertBonosNoIncluidosToBonosNoFisicos(List<Solicitudentregalotes> solicitudentregalotesList);
+
+    public void crearSolicitudSalidaBonos(Solicitudentrega s);
+
+    public List<Controlsalidabonos> getAllControlsalidabonos();
     
 }

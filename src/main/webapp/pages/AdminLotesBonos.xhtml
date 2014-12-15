@@ -28,9 +28,13 @@
                                     <p:dataTable id="detailsTable" var="element" value="#{crudLoteBonoBean.lista}"  
                                                  emptyMessage="#{label['lb_table.noelementos']}" widgetVar="detailsTable"
                                                  rows="#{sessionBean.paginacion}"
-                                                 paginator="true"
+                                                 paginator="true" 
                                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                  >
+
+                                        <p:column style="width:5%">
+                                            <p:rowToggler />
+                                        </p:column>
 
                                         <p:column headerText="#{label['id']}" sortBy="#{element.id}" >
                                             <h:outputText value="#{element.id}" />
@@ -59,6 +63,14 @@
                                             </p:commandButton> 
                                         </p:column>
 
+                                        <p:rowExpansion>
+                                            <p:dataList value="#{element.bonosnofisicosList}" var="bnf" type="ordered">
+                                                <f:facet name="header">
+                                                    Bonos no fisicos
+                                                </f:facet>
+                                                #{bnf.consecutivo}
+                                            </p:dataList>
+                                        </p:rowExpansion>
                                         <f:facet name="footer"> 
                                             <p:commandButton id="addButton" oncomplete="PF('addDialog').show();" 
                                                              value="#{label['lb_btn.agregar']}" icon="ui-icon-plusthick" title="#{label['lb_btn.agregar']}" 
