@@ -13,6 +13,7 @@ import com.invbf.sistemagestionbonos.entity.Solicitudentrega;
 import com.invbf.sistemagestionbonos.entity.Solicitudentregaclientes;
 import com.invbf.sistemagestionbonos.entity.Solicitudentregalotes;
 import com.invbf.sistemagestionbonos.entity.Solicitudentregalotesmaestro;
+import com.invbf.sistemagestionbonos.entity.Tiposbonos;
 import com.invbf.sistemagestionbonos.exceptions.ExistenBonosFisicosException;
 import com.invbf.sistemagestionbonos.exceptions.LoteBonosExistenteException;
 import java.util.List;
@@ -64,5 +65,11 @@ public interface MarketingFacade {
     public void crearSolicitudSalidaBonos(Solicitudentrega s);
 
     public List<Controlsalidabonos> getAllControlsalidabonos();
+
+    public Controlsalidabonos getSolicitudSalida(Integer id);
+
+    public List<Lotesbonos> getLotesBonosCasinoTipoBono(Integer idCasino, Tiposbonos tipoBono);
+
+    public void guardarControlSalidaBonos(Controlsalidabonos elemento);
     
 }

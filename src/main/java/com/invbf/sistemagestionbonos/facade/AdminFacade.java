@@ -59,4 +59,10 @@ public interface AdminFacade {
 
     public List<Usuariosdetalles> findAllUsuariosdetlles();
 
+    public Usuarios findUsuario();
+
+    public Usuarios findUsuario(Integer solicitante);
+
+    public Usuariosdetalles findUsuariosdetlles(Integer solicitante);
+
 }

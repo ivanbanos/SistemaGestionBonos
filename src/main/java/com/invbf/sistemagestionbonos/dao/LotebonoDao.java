@@ -6,6 +6,7 @@
 package com.invbf.sistemagestionbonos.dao;
 
 import com.invbf.sistemagestionbonos.entity.Lotesbonos;
+import com.invbf.sistemagestionbonos.entity.Tiposbonos;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -65,9 +66,9 @@ public class LotebonoDao {
         tx.begin();
         try {
             cargos = (List<Lotesbonos>) em.createNamedQuery("getexistesnte")
-                .setParameter("idCasino", elemento.getIdCasino())
-                .setParameter("denominacion", elemento.getDenominacion())
-                .setParameter("tipoBono", elemento.getTipoBono())
+                    .setParameter("idCasino", elemento.getIdCasino())
+                    .setParameter("denominacion", elemento.getDenominacion())
+                    .setParameter("tipoBono", elemento.getTipoBono())
                     .getResultList();
             tx.commit();
         } catch (Exception e) {
@@ -78,7 +79,30 @@ public class LotebonoDao {
         emf.close();
         if (cargos == null || cargos.isEmpty()) {
             return false;
-        } return true;
+        }
+        return true;
+    }
+
+    public static List<Lotesbonos> getByCasinoTipoBono(Integer idCasino, Tiposbonos tipoBono) {
+        EntityManagerFactory emf
+                = Persistence.createEntityManagerFactory("gestionBonosPU");
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        List<Lotesbonos> cargos = null;
+        tx.begin();
+        try {
+            cargos = (List<Lotesbonos>) em.createNamedQuery("getbyCasinoTipobono")
+                    .setParameter("idCasino", idCasino)
+                    .setParameter("tipoBono", tipoBono)
+                    .getResultList();
+            tx.commit();
+        } catch (Exception e) {
+            tx.rollback();
+        }
+
+        em.close();
+        emf.close();
+        return cargos;
     }
 
     public LotebonoDao() {

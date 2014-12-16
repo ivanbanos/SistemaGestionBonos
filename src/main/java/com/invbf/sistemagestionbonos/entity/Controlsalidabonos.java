@@ -59,6 +59,10 @@ public class Controlsalidabonos implements Serializable {
     private Solicitudentrega solicitudEntregaid;
     @OneToMany(mappedBy = "controlSalidaBonosid")
     private List<Bono> bonoList;
+    
+    @Column(name = "fechavencimientobonos")
+    @Temporal(TemporalType.DATE)
+    private Date fechavencimientobonos;
 
     @Size(max = 45)
     @Column(name = "estado")
@@ -85,6 +89,14 @@ public class Controlsalidabonos implements Serializable {
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
+    }
+
+    public Date getFechavencimientobonos() {
+        return fechavencimientobonos;
+    }
+
+    public void setFechavencimientobonos(Date fechavencimientobonos) {
+        this.fechavencimientobonos = fechavencimientobonos;
     }
 
     public Integer getSolicitante() {

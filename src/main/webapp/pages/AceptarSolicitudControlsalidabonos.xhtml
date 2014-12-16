@@ -11,7 +11,131 @@
     <ui:define name="content">
         <div class="container">
             <div class="row clearfix">
-                
+                <div class="col-md-12 ">
+
+                    <h:form id="form">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading"><h4>#{label['generarsolicitudcontrolsalida']}</h4></div>
+                            <div class="panel-body">
+                                <c:if id="generado" test="#{aceptarSolicitudSalidaBonosBean.elemento.id != null}">
+                                    <div class="row">
+                                        <div class="control-group">
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label" >#{label['id']}</label>
+                                                <div class="col-md-4">
+                                                    #{aceptarSolicitudSalidaBonosBean.elemento.id}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label" >#{label['fechacreacion']}</label>
+                                                <div class="col-md-4">
+                                                    <h:outputText value="#{aceptarSolicitudSalidaBonosBean.elemento.fecha}">
+                                                        <f:convertDateTime pattern="dd/MMMMM/yyyy hh:mm:ss" locale="es" timeZone="GTM-5"  />
+                                                    </h:outputText>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="control-group">
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label" >#{label['usuario']}</label>
+                                                <div class="col-md-4">
+                                                    #{aceptarSolicitudSalidaBonosBean.usuario.nombreUsuario}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label" >#{label['cargo']}</label>
+                                                <div class="col-md-4">
+                                                    #{aceptarSolicitudSalidaBonosBean.usuariosdetalles.idcargo.nombre}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="control-group">
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label" >#{label['casino']}</label>
+                                                <div class="col-md-4">
+                                                    #{aceptarSolicitudSalidaBonosBean.getCasinoById(aceptarSolicitudSalidaBonosBean.elemento.solicitudEntregaid.idCasino).nombre}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="control-group">
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label" >#{label['estado']}</label>
+                                                <div class="col-md-4">
+                                                    #{aceptarSolicitudSalidaBonosBean.elemento.estado}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="control-group">
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label" >#{label['tipobono']}</label>
+                                                <div class="col-md-4">
+                                                    #{aceptarSolicitudSalidaBonosBean.elemento.solicitudEntregaid.tipoBono.nombre}
+                                                </div>
+                                            </div>
+                                        </div><div class="control-group">
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label" >#{label['fechavencimientobono']}</label>
+                                                <div class="col-md-4">
+                                                    <h:outputText value="#{aceptarSolicitudSalidaBonosBean.elemento.fechavencimientobonos}">
+                                                        <f:convertDateTime pattern="dd/MMMMM/yyyy " locale="es" timeZone="GTM-5"  />
+                                                    </h:outputText>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </c:if>
+                                <div class="row">
+                                    <div class="control-group">
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <table class="table table-striped">
+                                                    <tr>
+                                                        <th>#{'cantidad'}</th>
+                                                        <th>#{'denominacion'}</th>
+                                                        <th>#{'total'}</th>
+                                                    </tr>
+                                                    <c:forEach items="#{aceptarSolicitudSalidaBonosBean.loteBonoCants}" var="lote" varStatus="status">
+                                                        <tr> 
+                                                            <td>#{lote.cantidad}</td>
+                                                            <td>#{lote.lote.denominacion.valor}</td>
+                                                            <td>#{lote.total}</td>
+                                                        </tr>
+                                                    </c:forEach>
+
+                                                    <tr>
+                                                        <td colspan="2"><label>#{label['totalretirado']}</label></td>
+                                                        <td><label>#{aceptarSolicitudSalidaBonosBean.total}</label></td>
+                                                    </tr>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                            <div class="panel-footer text-right"> 
+                                <p:commandButton id="btnconfirm" value="#{label['Confirmar']}" actionListener="#{aceptarSolicitudSalidaBonosBean.guardar()}" 
+                                                 ajax="false" style="margin:0" />
+                            </div>
+                        </div>
+                    </h:form>
+
+                </div>
             </div>
         </div>
     </ui:define>            

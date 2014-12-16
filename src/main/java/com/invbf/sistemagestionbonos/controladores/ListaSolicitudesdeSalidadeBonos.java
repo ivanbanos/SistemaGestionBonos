@@ -46,6 +46,7 @@ public class ListaSolicitudesdeSalidadeBonos {
             }
         }
         lista = sessionBean.marketingFacade.getAllControlsalidabonos();
+        System.out.println(lista.size());
     }
 
     public List<Controlsalidabonos> getLista() {

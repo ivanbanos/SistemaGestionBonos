@@ -159,5 +159,20 @@ public class AdminFacadeImpl implements AdminFacade{
     public List<Usuariosdetalles> findAllUsuariosdetlles() {
         return UsuarioDetalleDao.findAll();
     }
+
+    @Override
+    public Usuarios findUsuario() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Usuarios findUsuario(Integer solicitante) {
+        return UsuarioDao.find(solicitante);
+    }
+
+    @Override
+    public Usuariosdetalles findUsuariosdetlles(Integer solicitante) {
+        return UsuarioDetalleDao.find(solicitante);
+    }
     
 }
