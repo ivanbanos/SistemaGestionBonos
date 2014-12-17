@@ -131,14 +131,13 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="control-group">
+                                        <div class="form-group">
+                                            <div class="col-md-12">
 
-                                <c:if test="#{generadorSolicitudBonos.elemento.id!=null}">
-
-                                    <div class="row">
-                                        <div class="control-group">
-                                            <div class="form-group">
-                                                <div class="col-md-12">
-                                                    <h:dataTable class="table table-striped" value="#{generadorSolicitudBonos.solicitudentregaclienteses}" var="cli"
+                                                <p:outputPanel id="tablaclientes" style="display:block">
+                                                    <h:dataTable class="table table-striped" value="#{generadorSolicitudBonos.clientes}" var="cli"
                                                                  >
                                                         <f:facet name="header">
                                                             <h:outputText value="Clientes" />
@@ -171,7 +170,7 @@
                                                             </h:selectOneMenu>
                                                         </h:column>
                                                         <h:column >
-                                                            <p:commandButton id="quitar#{cli.clientessgb.id}" ajax="false" action="#{generadorSolicitudBonos.quitarCliente(cli.clientessgb.id)}" 
+                                                            <p:commandButton id="quitar#{cli.clientessgb.id}" update=":#{p:component('tablaclientes')}" action="#{generadorSolicitudBonos.quitarCliente(cli.clientessgb.id)}" 
                                                                              icon="ui-icon-closethick" title="#{label['lb_btn.borrar']}" />
                                                         </h:column>
                                                         <f:facet name="footer">
@@ -180,17 +179,14 @@
                                                                              icon="ui-icon-plusthick" title="#{label['lb_btn.agregar']}" />
                                                         </f:facet>
                                                     </h:dataTable>
+                                                </p:outputPanel>
 
 
-
-                                                </div>
                                             </div>
-
                                         </div>
+
                                     </div>
-
-
-                                </c:if>
+                                </div>
 
 
 

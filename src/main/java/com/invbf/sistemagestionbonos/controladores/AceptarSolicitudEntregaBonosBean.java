@@ -138,7 +138,7 @@ public class AceptarSolicitudEntregaBonosBean {
                 sessionBean.marketingFacade.editLoteBono(sol.getLotesBonosid(), sol.getBonosnoincluidosList());
             }
             elemento.setEstado("ACEPTADA");
-            sessionBean.marketingFacade.guardarSolicitudentregabonos(elemento);
+            sessionBean.marketingFacade.cambiarEstadoSolicitudentregabonos(elemento);
             sessionBean.getAttributes().remove("idsolicitudentregalotes");
             FacesContext.getCurrentInstance().getExternalContext().redirect("ListaSolicitudLotesBonosView.xhtml");
         } catch (IOException ex) {

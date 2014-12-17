@@ -130,7 +130,7 @@ public class AprobarSolicitudBonos {
     public void guardar() {
         elemento.setEstado("APROBADA");
         elemento.setSolicitudentregaclientesList(solicitudentregaclienteses);
-        sessionBean.marketingFacade.guardarSolicitudentrega(elemento);
+        sessionBean.marketingFacade.cambiarEstadoSolicitudentrega(elemento);
         sessionBean.marketingFacade.crearSolicitudSalidaBonos(elemento);
         sessionBean.registrarlog("Preaprobada solicitud Usuario:" + sessionBean.getUsuario().getNombreUsuario());
         FacesUtil.addInfoMessage("Solicitud aprobada con exito!", "");

@@ -10,7 +10,9 @@ import com.invbf.sistemagestionbonos.entity.Lotesbonos;
 import com.invbf.sistemagestionbonos.entity.Solicitudentregalotes;
 import com.invbf.sistemagestionbonos.entity.Solicitudentregalotesmaestro;
 import com.invbf.sistemagestionbonos.entitySGC.Casinos;
+import com.invbf.sistemagestionbonos.util.BonosnoincluidosDTO;
 import com.invbf.sistemagestionbonos.util.FacesUtil;
+import com.invbf.sistemagestionbonos.util.loteBonoSolicitud;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -39,6 +41,7 @@ public class GeneradorSolicitudLotesBonos {
 
     private Solicitudentregalotesmaestro elemento;
     private List<Casinos> casinos;
+    private List<loteBonoSolicitud> loteBonoSolicitudes;
 
     private final HashMap<String, Long> mapLetrasValores;
     private final HashMap<Long, String> mapValoresLetras;
@@ -118,22 +121,32 @@ public class GeneradorSolicitudLotesBonos {
             } catch (IOException ex) {
             }
         }
-
+        if (sessionBean.getAttributes().containsKey("lotesbonosnoincluidos")) {
+            loteBonoSolicitudes = (List<loteBonoSolicitud>) sessionBean.getAttributes().get("lotesbonosnoincluidos");
+            sessionBean.getAttributes().remove("lotesbonosnoincluidos");
+        } else {
+            loteBonoSolicitudes = new ArrayList<loteBonoSolicitud>();
+        }
         System.out.println("Buscando info de la solictud si existe");
         if (sessionBean.getAttributes().containsKey("idsolicitudentregalotes") && (Integer) sessionBean.getAttributes().get("idsolicitudentregalotes") != 0) {
             Integer id = (Integer) sessionBean.getAttributes().get("idsolicitudentregalotes");
             elemento = sessionBean.marketingFacade.getSolicitudentregalotesbono(id);
+            if (loteBonoSolicitudes.isEmpty()) {
+                for (Solicitudentregalotes sel : elemento.getSolicitudentregalotesList()) {
+                    List<BonosnoincluidosDTO> bniDtos = new ArrayList<BonosnoincluidosDTO>();
+                    for (Bonosnoincluidos bni : sel.getBonosnoincluidosList()) {
+                        bniDtos.add(new BonosnoincluidosDTO(bni.getId(), bni.getConsecutivo()));
+                    }
+                    loteBonoSolicitudes.add(new loteBonoSolicitud(sel.getId(), sel.getCantidad(), sel.getLotesBonosid(), bniDtos));
+                }
+            }
         } else {
             elemento = new Solicitudentregalotesmaestro();
             elemento.setSolicitudentregalotesList(new ArrayList<Solicitudentregalotes>(0));
             List<Lotesbonos> lotesbonoses = sessionBean.marketingFacade.getAllLotesBonos();
             List<Solicitudentregalotes> solicitudesentregalotes = new ArrayList<Solicitudentregalotes>();
             for (Lotesbonos lotesbonose : lotesbonoses) {
-                Solicitudentregalotes s = new Solicitudentregalotes();
-                s.setLotesBonosid(lotesbonose);
-                s.setCantidad(0);
-                s.setBonosnoincluidosList(new ArrayList<Bonosnoincluidos>());
-                solicitudesentregalotes.add(s);
+                loteBonoSolicitudes.add(new loteBonoSolicitud(lotesbonose));
             }
             elemento.setSolicitudentregalotesList(solicitudesentregalotes);
             System.out.println("Buscando Casinos");
@@ -162,27 +175,16 @@ public class GeneradorSolicitudLotesBonos {
             Calendar nowDate = Calendar.getInstance();
             nowDate.setTime(df2.parse(df.format(nowDate.getTime())));
             elemento.setFecha(nowDate.getTime());
-            for (Iterator<Solicitudentregalotes> iterator = elemento.getSolicitudentregalotesList().iterator(); iterator.hasNext();) {
-                Solicitudentregalotes next2 = iterator.next();
-                if (next2.getCantidad() == 0) {
-                    if (elemento.getId() != null) {
-                        sessionBean.marketingFacade.borrarSolicitudLote(next2);
-                    }
-                    iterator.remove();
-                } else {
-                    for (Iterator<Bonosnoincluidos> iterator2 = next2.getBonosnoincluidosList().iterator(); iterator2.hasNext();) {
-                        Bonosnoincluidos next = iterator2.next();
-                        if (next.getConsecutivo() == null || next.getConsecutivo().equals("")) {
-                            iterator2.remove();
-                            sessionBean.marketingFacade.borrarBononoIncluido(next);
-                        } else if (!isBonoDentro(next, next2)) {
-                            iterator2.remove();
-                            sessionBean.marketingFacade.borrarBononoIncluido(next);
-                        }
-                    }
+            elemento.getSolicitudentregalotesList().clear();
+            List<Integer> listaBonosReincluidos = new ArrayList<Integer>();
+            for (loteBonoSolicitud lotes : loteBonoSolicitudes) {
+                if (lotes.getCantidad() != 0) {
+                    Solicitudentregalotes sel = lotes.getSolicitudEntregaLote();
+                    elemento.getSolicitudentregalotesList().add(sel);
+                    listaBonosReincluidos.addAll(lotes.getBonosReincluidos());
                 }
             }
-            sessionBean.marketingFacade.guardarSolicitudentregabonos(elemento);
+            sessionBean.marketingFacade.guardarSolicitudentregabonos(elemento, listaBonosReincluidos);
             sessionBean.registrarlog("Generada solicitud Usuario:" + sessionBean.getUsuario().getNombreUsuario());
             sessionBean.getAttributes().put("idsolicitudentregalotes", elemento.getId());
             FacesContext.getCurrentInstance().getExternalContext().redirect("GeneradorSolicitudLoteBono.xhtml");
@@ -207,13 +209,10 @@ public class GeneradorSolicitudLotesBonos {
     }
 
     public void addBonoNoIncluido(Integer i) {
-        System.out.println("entra al menos" + elemento.getSolicitudentregalotesList().get(i).getBonosnoincluidosList().size());
-        Bonosnoincluidos bni = new Bonosnoincluidos();
-        bni.setSolicitudEntregaLotesid(elemento.getSolicitudentregalotesList().get(i));
-        sessionBean.marketingFacade.guardarBononoincluido(bni);
-
-        sessionBean.marketingFacade.guardarSolicitudentregabonos(elemento);
-        elemento.getSolicitudentregalotesList().get(i).getBonosnoincluidosList().add(bni);
+        System.out.println("entra al menos" + loteBonoSolicitudes.get(i).getBonosnoincluidosList().size());
+        BonosnoincluidosDTO bni = new BonosnoincluidosDTO();
+        loteBonoSolicitudes.get(i).getBonosnoincluidosList().add(bni);
+        sessionBean.getAttributes().put("lotesbonosnoincluidos", loteBonoSolicitudes);
     }
 
     private boolean isBonoDentro(Bonosnoincluidos next, Solicitudentregalotes solicitud) {
@@ -242,6 +241,14 @@ public class GeneradorSolicitudLotesBonos {
 
         }
         return (cantidad * 10000) + total;
+    }
+
+    public List<loteBonoSolicitud> getLoteBonoSolicitudes() {
+        return loteBonoSolicitudes;
+    }
+
+    public void setLoteBonoSolicitudes(List<loteBonoSolicitud> loteBonoSolicitudes) {
+        this.loteBonoSolicitudes = loteBonoSolicitudes;
     }
 
 }

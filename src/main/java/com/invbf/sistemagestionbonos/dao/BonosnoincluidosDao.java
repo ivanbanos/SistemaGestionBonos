@@ -66,6 +66,8 @@ public class BonosnoincluidosDao {
 
         tx.begin();
         try {
+            
+            cargo = em.find(Bonosnoincluidos.class, cargo.getId());
             em.remove(em.merge(cargo));
             tx.commit();
         } catch (Exception e) {

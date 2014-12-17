@@ -10,11 +10,11 @@ import com.invbf.sistemagestionbonos.entity.Clientessgb;
 import com.invbf.sistemagestionbonos.entity.Propositosentrega;
 import com.invbf.sistemagestionbonos.entity.Solicitudentrega;
 import com.invbf.sistemagestionbonos.entity.Solicitudentregaclientes;
-import com.invbf.sistemagestionbonos.entity.SolicitudentregaclientesPK;
 import com.invbf.sistemagestionbonos.entity.Tiposbonos;
 import com.invbf.sistemagestionbonos.entity.Usuariosdetalles;
 import com.invbf.sistemagestionbonos.entitySGC.Casinos;
 import com.invbf.sistemagestionbonos.entitySGC.Usuarios;
+import com.invbf.sistemagestionbonos.util.ClienteSGBDTO;
 import com.invbf.sistemagestionbonos.util.FacesUtil;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -52,7 +52,8 @@ public class GeneradorSolicitudBonos {
     private String nombres;
     private String apellidos;
     private List<Clientessgb> selectedClientessgbs;
-    private List<Solicitudentregaclientes> solicitudentregaclienteses;
+    private List<ClienteSGBDTO> clientes;
+    private List<Integer> clientesABorrar;
 
     @ManagedProperty("#{sessionBean}")
     private SessionBean sessionBean;
@@ -76,10 +77,14 @@ public class GeneradorSolicitudBonos {
         }
 
         System.out.println("Buscando info de la solictud si existe");
+        clientes = new ArrayList<ClienteSGBDTO>();
+        clientesABorrar = new ArrayList<Integer>();
         if (sessionBean.getAttributes().containsKey("idSolicitudentrega") && (Integer) sessionBean.getAttributes().get("idSolicitudentrega") != 0) {
             Integer id = (Integer) sessionBean.getAttributes().get("idSolicitudentrega");
             elemento = sessionBean.marketingFacade.getSolicitudbono(id);
-            solicitudentregaclienteses = elemento.getSolicitudentregaclientesList();
+            for(Solicitudentregaclientes sec :elemento.getSolicitudentregaclientesList()){
+                clientes.add(new ClienteSGBDTO(sec.getValorTotal(), sec.getClientessgb(), sec.getAreaid()));
+            }
         } else {
             try {
                 elemento = new Solicitudentrega();
@@ -96,7 +101,6 @@ public class GeneradorSolicitudBonos {
                 elemento.setSolicitante(sessionBean.getUsuario().getIdUsuario());
                 elemento.setTipoBono(new Tiposbonos());
                 elemento.setSolicitudentregaclientesList(new ArrayList<Solicitudentregaclientes>());
-                solicitudentregaclienteses = new ArrayList<Solicitudentregaclientes>();
             } catch (ParseException ex) {
                 Logger.getLogger(GeneradorSolicitudBonos.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -132,18 +136,35 @@ public class GeneradorSolicitudBonos {
     public void guardar() {
         if (elemento.getId() == null || elemento.getId().equals(0)) {
             elemento.setEstado("CREADA");
-            elemento.setSolicitudentregaclientesList(null);
-            elemento = sessionBean.marketingFacade.guardarSolicitudentrega(elemento);
+            List<Solicitudentregaclientes> solicitudentregaclienteses = new ArrayList<Solicitudentregaclientes>();
+            for (ClienteSGBDTO clientesGBT : clientes) {
+                Solicitudentregaclientes sec = new Solicitudentregaclientes();
+                sec.setAreaid(clientesGBT.getAreaid());
+                sec.setClientessgb(clientesGBT.getClientessgb());
+                sec.setValorTotal(clientesGBT.getValorTotal());
+                solicitudentregaclienteses.add(sec);
+            }
+            elemento.setSolicitudentregaclientesList(solicitudentregaclienteses);
+            elemento = sessionBean.marketingFacade.guardarSolicitudentrega(elemento, clientesABorrar);
             sessionBean.registrarlog("Generada solicitud Usuario:" + sessionBean.getUsuario().getNombreUsuario());
             FacesUtil.addInfoMessage("Solicitud guardada con exito!", "Notificación enviada");
         } else {
             elemento.setEstado("CREADA");
 
             System.out.println("por que intenta guardar un area");
+            
+            List<Solicitudentregaclientes> solicitudentregaclienteses = new ArrayList<Solicitudentregaclientes>();
+            for (ClienteSGBDTO clientesGBT : clientes) {
+                Solicitudentregaclientes sec = new Solicitudentregaclientes();
+                sec.setAreaid(clientesGBT.getAreaid());
+                sec.setClientessgb(clientesGBT.getClientessgb());
+                sec.setValorTotal(clientesGBT.getValorTotal());
+                solicitudentregaclienteses.add(sec);
+            }
             elemento.setSolicitudentregaclientesList(solicitudentregaclienteses);
 
             System.out.println("entremos a ver");
-            sessionBean.marketingFacade.guardarSolicitudentrega(elemento);
+            sessionBean.marketingFacade.guardarSolicitudentrega(elemento, clientesABorrar);
             sessionBean.registrarlog("Generada solicitud Usuario:" + sessionBean.getUsuario().getNombreUsuario());
             FacesUtil.addInfoMessage("Solicitud guardada con exito!", "Notificación enviada");
         }
@@ -263,63 +284,46 @@ public class GeneradorSolicitudBonos {
     }
 
     public void creadorClientesSolicitud() {
-        try {
-            for (Clientessgb selected : selectedClientessgbs) {
-                boolean existe = false;
-                for (Solicitudentregaclientes sec : solicitudentregaclienteses) {
-                    if (sec.getClientessgb().equals(selected)) {
-                        existe = true;
-                        break;
-                    }
-                }
-                System.out.println("Este cliente, " + selected.getNombres() + " " + selected.getApellidos() + ", existes? " + existe);
-                if (!existe) {
-                    Solicitudentregaclientes sec = new Solicitudentregaclientes();
-                    sec.setClientessgb(selected);
-                    sec.setSolicitudentrega(elemento);
-                    sec.setSolicitudentregaclientesPK(new SolicitudentregaclientesPK(elemento.getId(), sec.getClientessgb().getId()));
-                    
-                    sec.setValorTotal(5000f);
-                    solicitudentregaclienteses.add(sec);
+        for (Clientessgb selected : selectedClientessgbs) {
+            boolean existe = false;
+            for (ClienteSGBDTO sec : clientes) {
+                if (sec.getClientessgb().equals(selected)) {
+                    existe = true;
+                    break;
                 }
             }
-            elemento.setSolicitudentregaclientesList(solicitudentregaclienteses);
-            elemento = sessionBean.marketingFacade.guardarSolicitudentrega(elemento);
-            solicitudentregaclienteses = elemento.getSolicitudentregaclientesList();
-            
-            sessionBean.getAttributes().put("idSolicitudentrega", elemento.getId());
-            FacesContext.getCurrentInstance().getExternalContext().redirect("GeneradorSolicitudBonos.xhtml");
-        } catch (IOException ex) {
-            Logger.getLogger(GeneradorSolicitudBonos.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Este cliente, " + selected.getNombres() + " " + selected.getApellidos() + ", existes? " + existe);
+            if (!existe) {
+
+                ClienteSGBDTO sec = new ClienteSGBDTO();
+                sec.setClientessgb(selected);
+                sec.setAreaid(new Areas());
+                sec.setValorTotal(0f);
+                clientes.add(sec);
+            }
         }
     }
 
     public void quitarCliente(Integer i) {
         System.out.println("id " + i);
-        for (Iterator<Solicitudentregaclientes> iterator = solicitudentregaclienteses.iterator(); iterator.hasNext();) {
-            Solicitudentregaclientes sec = iterator.next();
+        for (Iterator<ClienteSGBDTO> iterator = clientes.iterator(); iterator.hasNext();) {
+            ClienteSGBDTO sec = iterator.next();
             System.out.println("id de este" + sec.getClientessgb().getId());
             if (sec.getClientessgb().getId().equals(i)) {
                 iterator.remove();
-                sessionBean.marketingFacade.borrarSolicitudCliente(sec);
+                clientesABorrar.add(sec.getClientessgb().getId());
                 break;
             }
         }
-        elemento.setSolicitudentregaclientesList(solicitudentregaclienteses);
-        elemento = sessionBean.marketingFacade.guardarSolicitudentrega(elemento);
-        solicitudentregaclienteses = elemento.getSolicitudentregaclientesList();
     }
 
-    public List<Solicitudentregaclientes> getSolicitudentregaclienteses() {
-        return solicitudentregaclienteses;
+    public List<ClienteSGBDTO> getClientes() {
+        return clientes;
     }
 
-    public void setSolicitudentregaclienteses(List<Solicitudentregaclientes> solicitudentregaclienteses) {
-        this.solicitudentregaclienteses = solicitudentregaclienteses;
+    public void setClientes(List<ClienteSGBDTO> clientes) {
+        this.clientes = clientes;
     }
 
-    public void setSalatoCliente(Integer idSala, Integer indexCliente){
-        this.solicitudentregaclienteses.get(indexCliente).setAreaid(new Areas(idSala));
-    }
-    
+
 }

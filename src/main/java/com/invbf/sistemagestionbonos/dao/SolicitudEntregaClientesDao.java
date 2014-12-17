@@ -68,6 +68,7 @@ public class SolicitudEntregaClientesDao {
 
         tx.begin();
         try {
+            cargo = em.find(Solicitudentregaclientes.class, cargo.getSolicitudentregaclientesPK());
             em.remove(em.merge(cargo));
             tx.commit();
         } catch (Exception e) {

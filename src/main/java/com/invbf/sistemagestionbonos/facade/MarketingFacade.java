@@ -28,7 +28,7 @@ public interface MarketingFacade {
 
     public List<Lotesbonos> getAllLotesBonos();
 
-    public boolean guardarSolicitudentregabonos(Solicitudentregalotesmaestro elemento);
+    public boolean guardarSolicitudentregabonos(Solicitudentregalotesmaestro elemento, List<Integer> bonosreincluidos);
 
     public List<Solicitudentregalotesmaestro> getAllSolicitudentregalotesmaestro();
 
@@ -50,7 +50,7 @@ public interface MarketingFacade {
 
     public Solicitudentrega getSolicitudbono(Integer id);
 
-    public Solicitudentrega guardarSolicitudentrega(Solicitudentrega elemento);
+    public Solicitudentrega guardarSolicitudentrega(Solicitudentrega elemento, List<Integer> clientesABorrar);
 
     public void borrarSolicitudCliente(Solicitudentregaclientes sec);
 
@@ -71,5 +71,9 @@ public interface MarketingFacade {
     public List<Lotesbonos> getLotesBonosCasinoTipoBono(Integer idCasino, Tiposbonos tipoBono);
 
     public void guardarControlSalidaBonos(Controlsalidabonos elemento);
+
+    public void cambiarEstadoSolicitudentrega(Solicitudentrega elemento);
+
+    public void cambiarEstadoSolicitudentregabonos(Solicitudentregalotesmaestro elemento);
     
 }
